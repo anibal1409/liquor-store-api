@@ -1,11 +1,9 @@
-import { Type } from 'class-transformer';
 // eslint-disable-next-line prettier/prettier
 import {
   IsBoolean,
   IsDateString,
   IsEmail,
   IsNotEmpty,
-  IsOptional,
   IsString,
 } from 'class-validator';
 
@@ -16,12 +14,11 @@ import {
   PartialType,
 } from '@nestjs/swagger';
 
-import { Patient } from '../../patients';
 import { User } from '../entities';
 import { UserRole } from '../enums';
 
 export class CreateUserDto extends PartialType(
-  OmitType(User, ['password', 'updatedAt', 'createdAt', 'deleted', 'patient']),
+  OmitType(User, ['password', 'updatedAt', 'createdAt', 'deleted']),
 ) {
   @ApiProperty()
   @IsNotEmpty()
@@ -53,11 +50,6 @@ export class CreateUserDto extends PartialType(
   @IsNotEmpty()
   @IsBoolean()
   status!: boolean;
-
-  @ApiProperty({ type: Patient })
-  @IsOptional()
-  @Type(() => Patient)
-  patient?: Patient;
 
   @ApiProperty()
   @IsNotEmpty()

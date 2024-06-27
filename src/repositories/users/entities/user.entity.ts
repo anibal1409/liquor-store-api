@@ -4,14 +4,11 @@ import {
   Column,
   Entity,
   Index,
-  JoinColumn,
-  ManyToOne,
 } from 'typeorm';
 
 import { ApiHideProperty } from '@nestjs/swagger';
 
 import { IdEntity } from '../../base';
-import { Patient } from '../../patients/entities';
 import { UserRole } from '../enums';
 
 @Entity()
@@ -29,7 +26,7 @@ export class User extends IdEntity {
   idDocument!: string;
 
   @Index('user_role_index')
-  @Column({ nullable: false, default: UserRole.Patient })
+  @Column({ nullable: false, default: UserRole.SalesAdvisor })
   role!: string;
 
   @ApiHideProperty()
@@ -39,8 +36,4 @@ export class User extends IdEntity {
 
   @Column({ nullable: false })
   birthdate!: Date;
-
-  @ManyToOne(() => Patient, (patient) => patient.id)
-  @JoinColumn()
-  patient?: Patient;
 }

@@ -7,11 +7,11 @@ import {
   InternalServerErrorException,
 } from '@nestjs/common';
 
-import { Patient } from '../repositories/patients/entities';
+import { Customer } from '../repositories/customers/entities';
 import {
-  Study,
-  StudyExams,
-} from '../repositories/studies/entities';
+  Sale,
+  SaleProduct,
+} from '../repositories/sales/entities';
 import { ReportsResponseDto } from './dto';
 import { CustomAssetsPathFolder } from './types/config';
 
@@ -86,9 +86,9 @@ export class ReportsService {
 
   async generatePdf(
     companyName: string,
-    patient: Patient,
-    study: Study,
-    exams: StudyExams[],
+    customer: Customer,
+    sale: Sale,
+    products: SaleProduct[],
   ): Promise<ReportsResponseDto> {
     const templateHtml = fs.readFileSync(
       path.resolve('./templates/template.html'),
@@ -127,9 +127,9 @@ export class ReportsService {
     const document = {
       html: templateHtml,
       data: {
-        patient,
-        study,
-        exams,
+        customer: customer,
+        study: sale,
+        exams: products,
       },
       path: `${CustomAssetsPathFolder}/${_pdfName}.pdf`,
       type: '',

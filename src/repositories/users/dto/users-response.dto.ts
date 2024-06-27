@@ -4,13 +4,11 @@ import {
   IsBoolean,
   IsDateString,
   IsNotEmpty,
-  IsOptional,
   IsString,
 } from 'class-validator';
 
 import { ApiProperty } from '@nestjs/swagger';
 
-import { Patient } from '../../patients/entities';
 import { User } from '../entities';
 
 export class UserRespondeDto {
@@ -50,11 +48,6 @@ export class UserRespondeDto {
   status: boolean;
 
   @ApiProperty()
-  @IsOptional()
-  @Type(() => Patient)
-  patient: Patient;
-
-  @ApiProperty()
   @IsNotEmpty()
   @IsDateString()
   birthdate!: Date;
@@ -67,7 +60,6 @@ export class UserRespondeDto {
     this.idDocument = data.idDocument;
     this.lastName = data.lastName;
     this.firstName = data.firstName;
-    this.patient = data.patient;
     this.birthdate = data.birthdate;
   }
 }

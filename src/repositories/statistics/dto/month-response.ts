@@ -1,4 +1,3 @@
-import { Type } from 'class-transformer';
 // eslint-disable-next-line prettier/prettier
 import {
   IsNotEmpty,
@@ -8,24 +7,7 @@ import {
 
 import { ApiProperty } from '@nestjs/swagger';
 
-export class GenderMonthRespondeDto {
-  @ApiProperty()
-  @IsNotEmpty()
-  @Type(() => Number)
-  male: number;
-
-  @ApiProperty()
-  @IsNotEmpty()
-  @Type(() => Number)
-  female: number;
-
-  constructor(data: any) {
-    this.female = data.female;
-    this.male = data.male;
-  }
-}
-
-class ExamDto {
+class SaleDto {
   @ApiProperty()
   @IsString()
   @IsNotEmpty()
@@ -43,23 +25,17 @@ class ExamDto {
 }
 
 export class MonthRespondeDto {
-  @ApiProperty()
-  @IsNotEmpty()
-  @Type(() => GenderMonthRespondeDto)
-  gender: GenderMonthRespondeDto;
 
   @ApiProperty()
   @IsNotEmpty()
-  typesExam: { [key: string]: number };
+  category: { [key: string]: number };
 
-  @ApiProperty({ type: ExamDto, isArray: true })
+  @ApiProperty({ type: SaleDto, isArray: true })
   @IsNotEmpty()
-  exams: ExamDto[];
+  sales: SaleDto[];
 
   constructor(data: any) {
-    console.log(data);
-    this.gender = new GenderMonthRespondeDto(data.gender);
-    this.exams = data.exams;
-    this.typesExam = data.typesExam;
+    this.sales = data.sales;
+    this.category = data.category;
   }
 }

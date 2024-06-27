@@ -1,7 +1,9 @@
 export * from './base';
-export * from './exams';
-export * from './patients';
+export * from './categories';
+export * from './customers';
+export * from './products';
 export * from './repositories.module';
-export * from './studies';
-export * from './types-exams';
+export * from './sales';
+export * from './statistics';
 export * from './users';
+

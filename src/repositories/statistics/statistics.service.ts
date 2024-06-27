@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 
-import { ExamsService } from '../exams';
-import { PatientsService } from '../patients/patients.service';
-import { StudiesService } from '../studies';
+import { CustomersService } from '../customers/customers.service';
+import { ProductsService } from '../products';
+import { SalesService } from '../sales';
 import { UsersService } from '../users/users.service';
 // eslint-disable-next-line prettier/prettier
 import {
@@ -15,10 +15,10 @@ import { Counters } from './entities';
 @Injectable()
 export class StatisticsService {
   constructor(
-    private readonly patientsService: PatientsService,
+    private readonly patientsService: CustomersService,
     private readonly usersService: UsersService,
-    private readonly studiesService: StudiesService,
-    private readonly examsService: ExamsService,
+    private readonly studiesService: SalesService,
+    private readonly examsService: ProductsService,
   ) {}
 
   async counters(): Promise<CountersRespondeDto> {
@@ -37,8 +37,7 @@ export class StatisticsService {
 
   async statisticsMonth(data: GetStatisticsDto): Promise<MonthRespondeDto> {
     return new MonthRespondeDto({
-      gender: await this.studiesService.generateMonthlyGenderStatistics(data),
-      typesExam: await this.studiesService.generateMonthlyExamTypeStatistics(data),
+      category: await this.studiesService.generateMonthlyExamTypeStatistics(data),
       exams: await this.studiesService.generateMonthlyExamStatistics(data),
     });
   }

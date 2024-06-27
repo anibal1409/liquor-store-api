@@ -14,7 +14,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { hashPassword } from '../../auth/password-hasher';
 import { CrudRepository } from '../../common/use-case';
 import { MailService } from '../../mail';
-import { PatientsService } from '../patients/patients.service';
+import { CustomersService } from '../customers/customers.service';
 import { UserRespondeDto } from './dto';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -27,7 +27,7 @@ export class UsersService implements CrudRepository<User> {
     @InjectRepository(User)
     private readonly repository: Repository<User>,
     private readonly mailService: MailService,
-    private readonly patientsService: PatientsService,
+    private readonly patientsService: CustomersService,
   ) {}
 
   async findValid(id: number): Promise<User> {
@@ -53,7 +53,6 @@ export class UsersService implements CrudRepository<User> {
       where: {
         email,
       },
-      relations: ['patient'],
     });
   }
 
@@ -63,24 +62,10 @@ export class UsersService implements CrudRepository<User> {
         idDocument,
         role: role || null,
       },
-      relations: ['patient'],
     });
   }
 
   async create(creatrDto: CreateUserDto): Promise<UserRespondeDto> {
-    let patient = null;
-    if (creatrDto?.patient?.idDocument) {
-      patient = await this.patientsService.create({
-        birthdate: creatrDto?.patient?.birthdate,
-        email: creatrDto?.patient?.email,
-        firstName: creatrDto?.patient?.firstName,
-        lastName: creatrDto?.patient?.lastName,
-        idDocument: creatrDto?.patient?.idDocument,
-        phone: creatrDto?.patient?.phone,
-        gender: creatrDto?.patient?.gender,
-        status: creatrDto?.patient?.status,
-      });
-    }
     const UserEmail = await this.findOneByEmail(creatrDto.email);
     if (UserEmail) {
       if (UserEmail.deleted) {
@@ -110,6 +95,7 @@ export class UsersService implements CrudRepository<User> {
       await hashPassword(Date.now().toString())
     ).substring(0, 10);
 
+    console.log(passwordDefault);
     const user = this.repository.create({
       email: creatrDto.email,
       password: await hashPassword(passwordDefault),
@@ -118,9 +104,6 @@ export class UsersService implements CrudRepository<User> {
       role: creatrDto.role,
       idDocument: creatrDto.idDocument,
       birthdate: creatrDto.birthdate,
-      patient: {
-        id: patient?.id,
-      },
     });
 
     console.log(user);
@@ -143,7 +126,6 @@ export class UsersService implements CrudRepository<User> {
         id: Not(userId),
         deleted: false,
       },
-      relations: ['patient'],
       order: {
         lastName: 'ASC',
       },
@@ -176,13 +158,6 @@ export class UsersService implements CrudRepository<User> {
       }
 
       throw new BadRequestException('Documento en uso');
-    }
-
-    if (updateUserDto?.patient?.id) {
-      await this.patientsService.update(
-        +updateUserDto?.patient?.id,
-        updateUserDto?.patient,
-      );
     }
 
     const _userRes = await this.repository.save({
