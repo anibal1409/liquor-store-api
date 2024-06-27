@@ -211,16 +211,16 @@
         ]
       }
     },
-    "/patients": {
+    "/customers": {
       "post": {
-        "operationId": "PatientsController_create",
+        "operationId": "CustomersController_create",
         "parameters": [],
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/CreatePatientDto"
+                "$ref": "#/components/schemas/CreateCustomerDto"
               }
             }
           }
@@ -231,18 +231,18 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PatientRespondeDto"
+                  "$ref": "#/components/schemas/CustomerRespondeDto"
                 }
               }
             }
           }
         },
         "tags": [
-          "patients"
+          "customers"
         ]
       },
       "get": {
-        "operationId": "PatientsController_findAll",
+        "operationId": "CustomersController_findAll",
         "parameters": [
           {
             "name": "id",
@@ -259,14 +259,6 @@
             "schema": {
               "type": "boolean"
             }
-          },
-          {
-            "name": "gender",
-            "required": false,
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
           }
         ],
         "responses": {
@@ -277,7 +269,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/PatientRespondeDto"
+                    "$ref": "#/components/schemas/CustomerRespondeDto"
                   }
                 }
               }
@@ -285,13 +277,13 @@
           }
         },
         "tags": [
-          "patients"
+          "customers"
         ]
       }
     },
-    "/patients/{id}": {
+    "/customers/{id}": {
       "get": {
-        "operationId": "PatientsController_findOne",
+        "operationId": "CustomersController_findOne",
         "parameters": [
           {
             "name": "id",
@@ -308,18 +300,18 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PatientRespondeDto"
+                  "$ref": "#/components/schemas/CustomerRespondeDto"
                 }
               }
             }
           }
         },
         "tags": [
-          "patients"
+          "customers"
         ]
       },
       "patch": {
-        "operationId": "PatientsController_update",
+        "operationId": "CustomersController_update",
         "parameters": [
           {
             "name": "id",
@@ -335,7 +327,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/UpdatePatientDto"
+                "$ref": "#/components/schemas/UpdateCustomerDto"
               }
             }
           }
@@ -346,18 +338,18 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PatientRespondeDto"
+                  "$ref": "#/components/schemas/CustomerRespondeDto"
                 }
               }
             }
           }
         },
         "tags": [
-          "patients"
+          "customers"
         ]
       },
       "delete": {
-        "operationId": "PatientsController_remove",
+        "operationId": "CustomersController_remove",
         "parameters": [
           {
             "name": "id",
@@ -374,20 +366,20 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PatientRespondeDto"
+                  "$ref": "#/components/schemas/CustomerRespondeDto"
                 }
               }
             }
           }
         },
         "tags": [
-          "patients"
+          "customers"
         ]
       }
     },
-    "/patients/document/{document}": {
+    "/customers/document/{document}": {
       "get": {
-        "operationId": "PatientsController_findOneByDocument",
+        "operationId": "CustomersController_findOneByDocument",
         "parameters": [
           {
             "name": "document",
@@ -404,27 +396,27 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PatientRespondeDto"
+                  "$ref": "#/components/schemas/CustomerRespondeDto"
                 }
               }
             }
           }
         },
         "tags": [
-          "patients"
+          "customers"
         ]
       }
     },
-    "/types-exams": {
+    "/categories": {
       "post": {
-        "operationId": "TypesExamsController_create",
+        "operationId": "CategoriesController_create",
         "parameters": [],
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/CreateTypesExamDto"
+                "$ref": "#/components/schemas/CreateCategoryDto"
               }
             }
           }
@@ -435,18 +427,18 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/TypesExamRespondeDto"
+                  "$ref": "#/components/schemas/CategoryRespondeDto"
                 }
               }
             }
           }
         },
         "tags": [
-          "types-exams"
+          "categories"
         ]
       },
       "get": {
-        "operationId": "TypesExamsController_findAll",
+        "operationId": "CategoriesController_findAll",
         "parameters": [],
         "responses": {
           "default": {
@@ -456,7 +448,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/TypesExamRespondeDto"
+                    "$ref": "#/components/schemas/CategoryRespondeDto"
                   }
                 }
               }
@@ -464,13 +456,13 @@
           }
         },
         "tags": [
-          "types-exams"
+          "categories"
         ]
       }
     },
-    "/types-exams/{id}": {
+    "/categories/{id}": {
       "get": {
-        "operationId": "TypesExamsController_findOne",
+        "operationId": "CategoriesController_findOne",
         "parameters": [
           {
             "name": "id",
@@ -487,18 +479,18 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/TypesExamRespondeDto"
+                  "$ref": "#/components/schemas/CategoryRespondeDto"
                 }
               }
             }
           }
         },
         "tags": [
-          "types-exams"
+          "categories"
         ]
       },
       "patch": {
-        "operationId": "TypesExamsController_update",
+        "operationId": "CategoriesController_update",
         "parameters": [
           {
             "name": "id",
@@ -514,7 +506,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/UpdateTypesExamDto"
+                "$ref": "#/components/schemas/UpdateCategoryDto"
               }
             }
           }
@@ -525,18 +517,18 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/TypesExamRespondeDto"
+                  "$ref": "#/components/schemas/CategoryRespondeDto"
                 }
               }
             }
           }
         },
         "tags": [
-          "types-exams"
+          "categories"
         ]
       },
       "delete": {
-        "operationId": "TypesExamsController_remove",
+        "operationId": "CategoriesController_remove",
         "parameters": [
           {
             "name": "id",
@@ -553,27 +545,27 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/TypesExamRespondeDto"
+                  "$ref": "#/components/schemas/CategoryRespondeDto"
                 }
               }
             }
           }
         },
         "tags": [
-          "types-exams"
+          "categories"
         ]
       }
     },
-    "/exams": {
+    "/products": {
       "post": {
-        "operationId": "ExamsController_create",
+        "operationId": "ProductsController_create",
         "parameters": [],
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/CreateExamDto"
+                "$ref": "#/components/schemas/CreateProductDto"
               }
             }
           }
@@ -584,18 +576,18 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ExamRespondeDto"
+                  "$ref": "#/components/schemas/ProductRespondeDto"
                 }
               }
             }
           }
         },
         "tags": [
-          "exams"
+          "products"
         ]
       },
       "get": {
-        "operationId": "ExamsController_findAll",
+        "operationId": "ProductsController_findAll",
         "parameters": [
           {
             "name": "id",
@@ -646,15 +638,7 @@
             }
           },
           {
-            "name": "united",
-            "required": false,
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "typesExamId",
+            "name": "categoryId",
             "required": false,
             "in": "query",
             "schema": {
@@ -670,7 +654,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/ExamRespondeDto"
+                    "$ref": "#/components/schemas/ProductRespondeDto"
                   }
                 }
               }
@@ -678,13 +662,13 @@
           }
         },
         "tags": [
-          "exams"
+          "products"
         ]
       }
     },
-    "/exams/{id}": {
+    "/products/{id}": {
       "get": {
-        "operationId": "ExamsController_findOne",
+        "operationId": "ProductsController_findOne",
         "parameters": [
           {
             "name": "id",
@@ -701,18 +685,18 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ExamRespondeDto"
+                  "$ref": "#/components/schemas/ProductRespondeDto"
                 }
               }
             }
           }
         },
         "tags": [
-          "exams"
+          "products"
         ]
       },
       "patch": {
-        "operationId": "ExamsController_update",
+        "operationId": "ProductsController_update",
         "parameters": [
           {
             "name": "id",
@@ -728,7 +712,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/UpdateExamDto"
+                "$ref": "#/components/schemas/UpdateProductDto"
               }
             }
           }
@@ -739,18 +723,18 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ExamRespondeDto"
+                  "$ref": "#/components/schemas/ProductRespondeDto"
                 }
               }
             }
           }
         },
         "tags": [
-          "exams"
+          "products"
         ]
       },
       "delete": {
-        "operationId": "ExamsController_remove",
+        "operationId": "ProductsController_remove",
         "parameters": [
           {
             "name": "id",
@@ -767,27 +751,27 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ExamRespondeDto"
+                  "$ref": "#/components/schemas/ProductRespondeDto"
                 }
               }
             }
           }
         },
         "tags": [
-          "exams"
+          "products"
         ]
       }
     },
-    "/studies": {
+    "/sales": {
       "post": {
-        "operationId": "StudiesController_create",
+        "operationId": "SalesController_create",
         "parameters": [],
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/CreateStudyDto"
+                "$ref": "#/components/schemas/CreateSaleDto"
               }
             }
           }
@@ -798,18 +782,18 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/StudyRespondeDto"
+                  "$ref": "#/components/schemas/SaleRespondeDto"
                 }
               }
             }
           }
         },
         "tags": [
-          "studies"
+          "sale"
         ]
       },
       "get": {
-        "operationId": "StudiesController_findAll",
+        "operationId": "SalesController_findAll",
         "parameters": [
           {
             "name": "id",
@@ -828,7 +812,7 @@
             }
           },
           {
-            "name": "PatientName",
+            "name": "customerName",
             "required": false,
             "in": "query",
             "schema": {
@@ -845,15 +829,7 @@
             }
           },
           {
-            "name": "stage",
-            "required": false,
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "typesExamId",
+            "name": "categoryId",
             "required": false,
             "in": "query",
             "schema": {
@@ -861,19 +837,11 @@
             }
           },
           {
-            "name": "patientId",
+            "name": "customerId",
             "required": false,
             "in": "query",
             "schema": {
               "type": "number"
-            }
-          },
-          {
-            "name": "sendEmail",
-            "required": false,
-            "in": "query",
-            "schema": {
-              "type": "boolean"
             }
           },
           {
@@ -901,7 +869,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/StudyRespondeDto"
+                    "$ref": "#/components/schemas/SaleRespondeDto"
                   }
                 }
               }
@@ -909,13 +877,13 @@
           }
         },
         "tags": [
-          "studies"
+          "sale"
         ]
       }
     },
-    "/studies/{id}": {
+    "/sales/{id}": {
       "get": {
-        "operationId": "StudiesController_findOne",
+        "operationId": "SalesController_findOne",
         "parameters": [
           {
             "name": "id",
@@ -932,18 +900,18 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/StudyRespondeDto"
+                  "$ref": "#/components/schemas/SaleRespondeDto"
                 }
               }
             }
           }
         },
         "tags": [
-          "studies"
+          "sale"
         ]
       },
       "patch": {
-        "operationId": "StudiesController_update",
+        "operationId": "SalesController_update",
         "parameters": [
           {
             "name": "id",
@@ -959,7 +927,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/UpdateStudyDto"
+                "$ref": "#/components/schemas/UpdateSaleDto"
               }
             }
           }
@@ -970,18 +938,18 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/StudyRespondeDto"
+                  "$ref": "#/components/schemas/SaleRespondeDto"
                 }
               }
             }
           }
         },
         "tags": [
-          "studies"
+          "sale"
         ]
       },
       "delete": {
-        "operationId": "StudiesController_remove",
+        "operationId": "SalesController_remove",
         "parameters": [
           {
             "name": "id",
@@ -998,14 +966,44 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/StudyRespondeDto"
+                  "$ref": "#/components/schemas/SaleRespondeDto"
                 }
               }
             }
           }
         },
         "tags": [
-          "studies"
+          "sale"
+        ]
+      }
+    },
+    "/sales/resport/{id}": {
+      "get": {
+        "operationId": "SalesController_generatePdf",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReportsResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "sale"
         ]
       }
     },
@@ -1065,6 +1063,117 @@
         },
         "tags": [
           "statistics"
+        ]
+      }
+    },
+    "/orders": {
+      "post": {
+        "operationId": "OrdersController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateOrderDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "orders"
+        ]
+      },
+      "get": {
+        "operationId": "OrdersController_findAll",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "orders"
+        ]
+      }
+    },
+    "/orders/{id}": {
+      "get": {
+        "operationId": "OrdersController_findOne",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "orders"
+        ]
+      },
+      "patch": {
+        "operationId": "OrdersController_update",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateOrderDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "orders"
+        ]
+      },
+      "delete": {
+        "operationId": "OrdersController_remove",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "orders"
         ]
       }
     },
@@ -1269,13 +1378,17 @@
     }
   },
   "info": {
-    "title": "Laboratory",
-    "description": "The Laboratory-API description",
+    "title": "MI PROFE",
+    "description": "The MI PROFE-API description",
     "version": "1.0",
     "contact": {}
   },
   "tags": [],
-  "servers": [],
+  "servers": [
+    {
+      "url": "api"
+    }
+  ],
   "components": {
     "securitySchemes": {
       "cookie": {
@@ -1285,10 +1398,6 @@
       }
     },
     "schemas": {
-      "Patient": {
-        "type": "object",
-        "properties": {}
-      },
       "CreateUserDto": {
         "type": "object",
         "properties": {
@@ -1310,9 +1419,6 @@
           "status": {
             "type": "boolean"
           },
-          "patient": {
-            "$ref": "#/components/schemas/Patient"
-          },
           "birthdate": {
             "format": "date-time",
             "type": "string"
@@ -1325,7 +1431,6 @@
           "lastName",
           "firstName",
           "status",
-          "patient",
           "birthdate"
         ]
       },
@@ -1353,9 +1458,6 @@
           "status": {
             "type": "boolean"
           },
-          "patient": {
-            "$ref": "#/components/schemas/Patient"
-          },
           "birthdate": {
             "format": "date-time",
             "type": "string"
@@ -1369,7 +1471,6 @@
           "role",
           "idDocument",
           "status",
-          "patient",
           "birthdate"
         ]
       },
@@ -1394,16 +1495,13 @@
           "status": {
             "type": "boolean"
           },
-          "patient": {
-            "$ref": "#/components/schemas/Patient"
-          },
           "birthdate": {
             "format": "date-time",
             "type": "string"
           }
         }
       },
-      "CreatePatientDto": {
+      "CreateCustomerDto": {
         "type": "object",
         "properties": {
           "email": {
@@ -1412,37 +1510,28 @@
           "idDocument": {
             "type": "string"
           },
-          "lastName": {
+          "name": {
             "type": "string"
           },
-          "firstName": {
+          "address": {
             "type": "string"
           },
           "status": {
             "type": "boolean"
           },
-          "birthdate": {
-            "format": "date-time",
-            "type": "string"
-          },
           "phone": {
-            "type": "string"
-          },
-          "gender": {
             "type": "string"
           }
         },
         "required": [
           "email",
           "idDocument",
-          "lastName",
-          "firstName",
-          "status",
-          "birthdate",
-          "gender"
+          "name",
+          "address",
+          "status"
         ]
       },
-      "PatientRespondeDto": {
+      "CustomerRespondeDto": {
         "type": "object",
         "properties": {
           "id": {
@@ -1451,41 +1540,32 @@
           "status": {
             "type": "boolean"
           },
-          "email": {
-            "type": "string"
-          },
-          "idDocument": {
+          "firstName": {
             "type": "string"
           },
           "lastName": {
             "type": "string"
           },
-          "firstName": {
-            "type": "string"
-          },
-          "birthdate": {
-            "format": "date-time",
-            "type": "string"
-          },
-          "phone": {
+          "idDocument": {
             "type": "string"
           },
           "gender": {
+            "type": "string"
+          },
+          "phone": {
             "type": "string"
           }
         },
         "required": [
           "id",
           "status",
-          "email",
-          "idDocument",
-          "lastName",
           "firstName",
-          "birthdate",
+          "lastName",
+          "idDocument",
           "gender"
         ]
       },
-      "UpdatePatientDto": {
+      "UpdateCustomerDto": {
         "type": "object",
         "properties": {
           "email": {
@@ -1494,28 +1574,21 @@
           "idDocument": {
             "type": "string"
           },
-          "lastName": {
+          "name": {
             "type": "string"
           },
-          "firstName": {
+          "address": {
             "type": "string"
           },
           "status": {
             "type": "boolean"
           },
-          "birthdate": {
-            "format": "date-time",
-            "type": "string"
-          },
           "phone": {
-            "type": "string"
-          },
-          "gender": {
             "type": "string"
           }
         }
       },
-      "CreateTypesExamDto": {
+      "CreateCategoryDto": {
         "type": "object",
         "properties": {
           "name": {
@@ -1533,7 +1606,7 @@
           "status"
         ]
       },
-      "TypesExamRespondeDto": {
+      "CategoryRespondeDto": {
         "type": "object",
         "properties": {
           "id": {
@@ -1555,7 +1628,7 @@
           "status"
         ]
       },
-      "UpdateTypesExamDto": {
+      "UpdateCategoryDto": {
         "type": "object",
         "properties": {
           "name": {
@@ -1577,7 +1650,7 @@
           }
         }
       },
-      "CreateExamDto": {
+      "CreateProductDto": {
         "type": "object",
         "properties": {
           "name": {
@@ -1592,19 +1665,7 @@
           "status": {
             "type": "boolean"
           },
-          "unitedCheck": {
-            "type": "boolean"
-          },
-          "united": {
-            "type": "string"
-          },
-          "valuesCheck": {
-            "type": "boolean"
-          },
-          "values": {
-            "type": "string"
-          },
-          "typesExam": {
+          "category": {
             "$ref": "#/components/schemas/IdCreateEntity"
           }
         },
@@ -1612,16 +1673,14 @@
           "name",
           "price",
           "status",
-          "unitedCheck",
-          "valuesCheck",
-          "typesExam"
+          "category"
         ]
       },
-      "TypesExam": {
+      "Category": {
         "type": "object",
         "properties": {}
       },
-      "ExamRespondeDto": {
+      "ProductRespondeDto": {
         "type": "object",
         "properties": {
           "id": {
@@ -1636,23 +1695,14 @@
           "description": {
             "type": "string"
           },
+          "path": {
+            "type": "string"
+          },
           "price": {
             "type": "number"
           },
-          "unitedCheck": {
-            "type": "boolean"
-          },
-          "united": {
-            "type": "string"
-          },
-          "valuesCheck": {
-            "type": "boolean"
-          },
-          "values": {
-            "type": "string"
-          },
-          "typesExam": {
-            "$ref": "#/components/schemas/TypesExam"
+          "category": {
+            "$ref": "#/components/schemas/Category"
           }
         },
         "required": [
@@ -1660,12 +1710,10 @@
           "status",
           "name",
           "price",
-          "unitedCheck",
-          "valuesCheck",
-          "typesExam"
+          "category"
         ]
       },
-      "UpdateExamDto": {
+      "UpdateProductDto": {
         "type": "object",
         "properties": {
           "name": {
@@ -1680,46 +1728,36 @@
           "status": {
             "type": "boolean"
           },
-          "unitedCheck": {
-            "type": "boolean"
-          },
-          "united": {
-            "type": "string"
-          },
-          "valuesCheck": {
-            "type": "boolean"
-          },
-          "values": {
-            "type": "string"
-          },
-          "typesExam": {
+          "category": {
             "$ref": "#/components/schemas/IdCreateEntity"
           }
         }
       },
-      "CreateStudyExamDto": {
+      "CreateSaleProductDto": {
         "type": "object",
         "properties": {
           "id": {
             "type": "number"
           },
-          "value": {
+          "amount": {
             "type": "string"
           },
-          "exam": {
+          "price": {
+            "type": "string"
+          },
+          "product": {
             "$ref": "#/components/schemas/IdCreateEntity"
           }
         },
         "required": [
-          "exam"
+          "amount",
+          "price",
+          "product"
         ]
       },
-      "CreateStudyDto": {
+      "CreateSaleDto": {
         "type": "object",
         "properties": {
-          "stage": {
-            "type": "string"
-          },
           "date": {
             "format": "date-time",
             "type": "string"
@@ -1733,33 +1771,33 @@
           "total": {
             "type": "number"
           },
-          "patient": {
+          "customer": {
             "$ref": "#/components/schemas/IdCreateEntity"
           },
-          "studyExams": {
+          "saleProducts": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/CreateStudyExamDto"
+              "$ref": "#/components/schemas/CreateSaleProductDto"
             }
           }
         },
         "required": [
-          "stage",
           "date",
           "sendEmail",
           "total",
-          "patient",
-          "studyExams"
+          "customer",
+          "saleProducts"
         ]
       },
-      "StudyRespondeDto": {
+      "Customer": {
+        "type": "object",
+        "properties": {}
+      },
+      "SaleRespondeDto": {
         "type": "object",
         "properties": {
           "id": {
             "type": "number"
-          },
-          "stage": {
-            "type": "string"
           },
           "date": {
             "format": "date-time",
@@ -1768,38 +1806,41 @@
           "note": {
             "type": "string"
           },
-          "sendEmail": {
-            "type": "boolean"
-          },
           "total": {
             "type": "number"
           },
-          "patient": {
-            "$ref": "#/components/schemas/Patient"
+          "customer": {
+            "$ref": "#/components/schemas/Customer"
           },
-          "studyExams": {
+          "saleProducts": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/CreateStudyExamDto"
+              "$ref": "#/components/schemas/CreateSaleProductDto"
             }
           }
         },
         "required": [
           "id",
-          "stage",
           "date",
-          "sendEmail",
           "total",
-          "patient",
-          "studyExams"
+          "customer",
+          "saleProducts"
         ]
       },
-      "UpdateStudyDto": {
+      "ReportsResponseDto": {
         "type": "object",
         "properties": {
-          "stage": {
+          "reportUrl": {
             "type": "string"
-          },
+          }
+        },
+        "required": [
+          "reportUrl"
+        ]
+      },
+      "UpdateSaleDto": {
+        "type": "object",
+        "properties": {
           "date": {
             "format": "date-time",
             "type": "string"
@@ -1813,13 +1854,13 @@
           "total": {
             "type": "number"
           },
-          "patient": {
+          "customer": {
             "$ref": "#/components/schemas/IdCreateEntity"
           },
-          "studyExams": {
+          "saleProducts": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/CreateStudyExamDto"
+              "$ref": "#/components/schemas/CreateSaleProductDto"
             }
           }
         }
@@ -1847,22 +1888,7 @@
           "exams"
         ]
       },
-      "GenderMonthRespondeDto": {
-        "type": "object",
-        "properties": {
-          "male": {
-            "type": "number"
-          },
-          "female": {
-            "type": "number"
-          }
-        },
-        "required": [
-          "male",
-          "female"
-        ]
-      },
-      "ExamDto": {
+      "SaleDto": {
         "type": "object",
         "properties": {
           "name": {
@@ -1880,24 +1906,28 @@
       "MonthRespondeDto": {
         "type": "object",
         "properties": {
-          "gender": {
-            "$ref": "#/components/schemas/GenderMonthRespondeDto"
-          },
-          "typesExam": {
+          "category": {
             "type": "object"
           },
-          "exams": {
+          "sales": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/ExamDto"
+              "$ref": "#/components/schemas/SaleDto"
             }
           }
         },
         "required": [
-          "gender",
-          "typesExam",
-          "exams"
+          "category",
+          "sales"
         ]
+      },
+      "CreateOrderDto": {
+        "type": "object",
+        "properties": {}
+      },
+      "UpdateOrderDto": {
+        "type": "object",
+        "properties": {}
       },
       "LoginDto": {
         "type": "object",
@@ -1937,9 +1967,6 @@
           },
           "loginStamp": {
             "type": "number"
-          },
-          "patient": {
-            "$ref": "#/components/schemas/Patient"
           }
         },
         "required": [
@@ -1949,8 +1976,7 @@
           "firstName",
           "idDocument",
           "role",
-          "loginStamp",
-          "patient"
+          "loginStamp"
         ]
       },
       "RecoveryPasswordDto": {
