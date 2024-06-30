@@ -21,6 +21,11 @@ export class CreateSaleProductDto extends IdCreateEntity {
   @IsNumber()
   price: string;
 
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsNumber()
+  subtotal: string;
+
   @ApiProperty({ type: IdCreateEntity })
   @IsNotEmpty()
   @Type(() => IdCreateEntity)

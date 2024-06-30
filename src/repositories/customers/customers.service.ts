@@ -88,9 +88,10 @@ export class CustomersService implements CrudRepository<Customer> {
     const item = await this.repository.save({
       id,
       idDocument: updateDto.idDocument,
-      name: updateDto.name,
+      firstName: updateDto.firstName,
+      lastName: updateDto.lastName,
       status: updateDto.status,
-      email: updateDto.email,
+      gender: updateDto.gender,
       phone: updateDto.phone,
     });
 

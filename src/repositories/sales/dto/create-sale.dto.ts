@@ -1,7 +1,6 @@
 import { Type } from 'class-transformer';
 import {
   ArrayNotEmpty,
-  IsBoolean,
   IsDateString,
   IsNotEmpty,
   IsNumber,
@@ -42,8 +41,8 @@ export class CreateSaleDto extends PartialType(
 
   @ApiProperty()
   @IsNotEmpty()
-  @IsBoolean()
-  sendEmail!: boolean;
+  @IsString()
+  stage: string;
 
   @ApiProperty()
   @IsNotEmpty()

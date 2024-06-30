@@ -43,13 +43,7 @@ export class SalesService implements CrudRepository<Sale> {
         id,
       },
 
-      relations: [
-        'customer',
-        'saleProduct',
-        'saleProduct.product',
-        'saleService',
-        'saleService.service',
-      ],
+      relations: ['customer', 'saleProducts', 'saleProducts.product'],
     });
     if (!entity) {
       throw new NotFoundException('Estudio no encontrado');
@@ -58,21 +52,22 @@ export class SalesService implements CrudRepository<Sale> {
   }
 
   async create(createDto: CreateSaleDto): Promise<SaleRespondeDto> {
-    console.log('createDto', createDto);
     const item = await this.repository.save(createDto);
-    // const studyExams = createDto.studyExams.map((studyExam) => {
-    //   return {
-    //     exam: {
-    //       id: studyExam.exam.id,
-    //     },
-    //     study: {
-    //       id: item.id,
-    //     },
-    //     value: studyExam.value,
-    //   };
-    // });
+    const studyExams = createDto.saleProducts.map((saleProduct) => {
+      return {
+        product: {
+          id: saleProduct.product.id,
+        },
+        sale: {
+          id: item.id,
+        },
+        price: saleProduct.price,
+        amount: saleProduct.amount,
+        subtotal: saleProduct.subtotal,
+      };
+    });
 
-    // await this.repositoryStudyExams.save(studyExams);
+    await this.repositoryStudyExams.save(studyExams);
 
     return await this.findOne(item.id);
   }
@@ -98,12 +93,9 @@ export class SalesService implements CrudRepository<Sale> {
       },
       relations: [
         'customer',
-        'saleProduct',
-        'saleProduct.product',
-        'saleProduct.product.category',
-        'saleService',
-        'saleService.service',
-        'saleService.service.category',
+        'saleProducts',
+        'saleProducts.product',
+        'saleProducts.product.category',
       ],
     });
   }
@@ -113,10 +105,7 @@ export class SalesService implements CrudRepository<Sale> {
     return new SaleRespondeDto(item);
   }
 
-  async update(
-    id: number,
-    updateDto: UpdateSaleDto,
-  ): Promise<SaleRespondeDto> {
+  async update(id: number, updateDto: UpdateSaleDto): Promise<SaleRespondeDto> {
     const item = await this.repository.save({
       id,
       note: updateDto.note,
@@ -125,22 +114,25 @@ export class SalesService implements CrudRepository<Sale> {
       },
       total: updateDto.total,
       date: updateDto.date,
+      stage: updateDto.stage,
     });
 
-    // const studyExams = updateDto.studyExams.map((studyExam) => {
-    //   return {
-    //     id: studyExam.id,
-    //     exam: {
-    //       id: studyExam.exam.id,
-    //     },
-    //     study: {
-    //       id,
-    //     },
-    //     value: studyExam.value,
-    //   };
-    // });
+    const studyExams = updateDto.saleProducts.map((saleProduct) => {
+      return {
+        id: saleProduct.id,
+        exam: {
+          id: saleProduct.product.id,
+        },
+        sale: {
+          id,
+        },
+        price: saleProduct.price,
+        amount: saleProduct.amount,
+        subtotal: saleProduct.subtotal,
+      };
+    });
 
-    // this.repositoryStudyExams.save(studyExams);
+    this.repositoryStudyExams.save(studyExams);
 
     return this.findOne(item.id);
   }

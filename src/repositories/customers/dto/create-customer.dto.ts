@@ -1,7 +1,6 @@
 // eslint-disable-next-line prettier/prettier
 import {
   IsBoolean,
-  IsEmail,
   IsNotEmpty,
   IsString,
 } from 'class-validator';
@@ -9,7 +8,6 @@ import {
 // eslint-disable-next-line prettier/prettier
 import {
   ApiProperty,
-  ApiPropertyOptional,
   OmitType,
   PartialType,
 } from '@nestjs/swagger';
@@ -21,32 +19,31 @@ export class CreateCustomerDto extends PartialType(
 ) {
   @ApiProperty()
   @IsNotEmpty()
-  @IsEmail()
-  @IsString()
-  email!: string;
-
-  @ApiProperty()
-  @IsNotEmpty()
   @IsString()
   idDocument!: string;
 
   @ApiProperty()
   @IsNotEmpty()
   @IsString()
-  name: string;
+  firstName: string;
 
   @ApiProperty()
   @IsNotEmpty()
   @IsString()
-  address: string;
+  lastName: string;
 
   @ApiProperty()
   @IsNotEmpty()
   @IsBoolean()
   status!: boolean;
 
-  @ApiPropertyOptional()
+  @ApiProperty()
   @IsNotEmpty()
   @IsString()
   phone: string;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsString()
+  gender: string;
 }

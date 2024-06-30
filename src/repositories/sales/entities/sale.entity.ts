@@ -10,6 +10,7 @@ import {
 import { IdEntity } from '../../base';
 import { Customer } from '../../customers';
 import { User } from '../../users/entities';
+import { StageStudy } from '../enums';
 import { SaleProduct } from './saleProduct.entity';
 
 @Entity()
@@ -20,14 +21,8 @@ export class Sale extends IdEntity {
   @Column({ nullable: true })
   note?: string;
 
-  @Column({ nullable: false, default: false })
-  sendEmail: boolean;
-
-  @Column({ nullable: false, default: 0 })
-  iva: number;
-
-  @Column({ nullable: false, default: 0 })
-  subtotal: number;
+  @Column({ nullable: false, default: StageStudy.Pending })
+  stage: string;
 
   @Column({ nullable: false, default: 0 })
   total: number;

@@ -23,6 +23,9 @@ export class Product extends IdEntity {
   @Column({ nullable: false })
   price!: number;
 
+  @Column({ nullable: false })
+  stock!: number;
+
   @Column({ nullable: true })
   path!: string;
 

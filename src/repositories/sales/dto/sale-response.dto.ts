@@ -37,6 +37,11 @@ export class SaleRespondeDto {
 
   @ApiProperty()
   @IsNotEmpty()
+  @IsString()
+  stage: string;
+
+  @ApiProperty()
+  @IsNotEmpty()
   @IsNumber()
   total!: number;
 
@@ -56,6 +61,7 @@ export class SaleRespondeDto {
     this.note = data.note;
     this.customer = data.customer;
     this.total = data.total;
+    this.stage = data.stage;
     this.saleProducts = data.saleProducts as any;
   }
 }

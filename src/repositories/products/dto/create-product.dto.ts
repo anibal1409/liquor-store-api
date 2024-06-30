@@ -37,6 +37,11 @@ export class CreateProductDto extends PartialType(
 
   @ApiProperty()
   @IsNotEmpty()
+  @Type(() => Number)
+  stock: number;
+
+  @ApiProperty()
+  @IsNotEmpty()
   @IsBoolean()
   status!: boolean;
 

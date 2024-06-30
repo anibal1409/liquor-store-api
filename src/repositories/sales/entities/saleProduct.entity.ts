@@ -21,7 +21,7 @@ export class SaleProduct {
   amount!: string;
 
   @Column({ nullable: true })
-  total!: string;
+  subtotal!: string;
 
   @ManyToOne(() => Product, (product) => product.sales)
   product: Product;

@@ -622,6 +622,14 @@
             }
           },
           {
+            "name": "stock",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
             "name": "moreOrequal",
             "required": false,
             "in": "query",
@@ -1504,16 +1512,13 @@
       "CreateCustomerDto": {
         "type": "object",
         "properties": {
-          "email": {
-            "type": "string"
-          },
           "idDocument": {
             "type": "string"
           },
-          "name": {
+          "firstName": {
             "type": "string"
           },
-          "address": {
+          "lastName": {
             "type": "string"
           },
           "status": {
@@ -1521,14 +1526,18 @@
           },
           "phone": {
             "type": "string"
+          },
+          "gender": {
+            "type": "string"
           }
         },
         "required": [
-          "email",
           "idDocument",
-          "name",
-          "address",
-          "status"
+          "firstName",
+          "lastName",
+          "status",
+          "phone",
+          "gender"
         ]
       },
       "CustomerRespondeDto": {
@@ -1568,22 +1577,22 @@
       "UpdateCustomerDto": {
         "type": "object",
         "properties": {
-          "email": {
-            "type": "string"
-          },
           "idDocument": {
             "type": "string"
           },
-          "name": {
+          "firstName": {
             "type": "string"
           },
-          "address": {
+          "lastName": {
             "type": "string"
           },
           "status": {
             "type": "boolean"
           },
           "phone": {
+            "type": "string"
+          },
+          "gender": {
             "type": "string"
           }
         }
@@ -1662,6 +1671,9 @@
           "price": {
             "type": "number"
           },
+          "stock": {
+            "type": "number"
+          },
           "status": {
             "type": "boolean"
           },
@@ -1672,6 +1684,7 @@
         "required": [
           "name",
           "price",
+          "stock",
           "status",
           "category"
         ]
@@ -1701,6 +1714,9 @@
           "price": {
             "type": "number"
           },
+          "stock": {
+            "type": "number"
+          },
           "category": {
             "$ref": "#/components/schemas/Category"
           }
@@ -1710,6 +1726,7 @@
           "status",
           "name",
           "price",
+          "stock",
           "category"
         ]
       },
@@ -1723,6 +1740,9 @@
             "type": "string"
           },
           "price": {
+            "type": "number"
+          },
+          "stock": {
             "type": "number"
           },
           "status": {
@@ -1745,6 +1765,9 @@
           "price": {
             "type": "string"
           },
+          "subtotal": {
+            "type": "string"
+          },
           "product": {
             "$ref": "#/components/schemas/IdCreateEntity"
           }
@@ -1752,6 +1775,7 @@
         "required": [
           "amount",
           "price",
+          "subtotal",
           "product"
         ]
       },
@@ -1765,8 +1789,8 @@
           "note": {
             "type": "string"
           },
-          "sendEmail": {
-            "type": "boolean"
+          "stage": {
+            "type": "string"
           },
           "total": {
             "type": "number"
@@ -1783,7 +1807,7 @@
         },
         "required": [
           "date",
-          "sendEmail",
+          "stage",
           "total",
           "customer",
           "saleProducts"
@@ -1848,8 +1872,8 @@
           "note": {
             "type": "string"
           },
-          "sendEmail": {
-            "type": "boolean"
+          "stage": {
+            "type": "string"
           },
           "total": {
             "type": "number"

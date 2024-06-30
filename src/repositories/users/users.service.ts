@@ -14,7 +14,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { hashPassword } from '../../auth/password-hasher';
 import { CrudRepository } from '../../common/use-case';
 import { MailService } from '../../mail';
-import { CustomersService } from '../customers/customers.service';
 import { UserRespondeDto } from './dto';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -27,7 +26,6 @@ export class UsersService implements CrudRepository<User> {
     @InjectRepository(User)
     private readonly repository: Repository<User>,
     private readonly mailService: MailService,
-    private readonly patientsService: CustomersService,
   ) {}
 
   async findValid(id: number): Promise<User> {
@@ -35,7 +33,7 @@ export class UsersService implements CrudRepository<User> {
       where: {
         id,
       },
-      relations: ['patient'],
+      relations: [],
     });
     if (!entity) {
       throw new NotFoundException('Usuario no encontrado');

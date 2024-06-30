@@ -18,7 +18,7 @@ import {
   GetProductsDto,
   ProductRespondeDto,
 } from './dto';
-import { CreateProductDto } from './dto/product.dto';
+import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { Product } from './entities';
 
