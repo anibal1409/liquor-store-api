@@ -35,7 +35,7 @@ export class SalesService implements CrudRepository<Sale> {
     @InjectRepository(SaleProduct)
     private readonly repositoryStudyExams: Repository<SaleProduct>,
     private readonly reportsService: ReportsService,
-  ) {}
+  ) { }
 
   async findValid(id: number): Promise<Sale> {
     const entity = await this.repository.findOne({
@@ -241,15 +241,36 @@ export class SalesService implements CrudRepository<Sale> {
     }
   }
 
-
   async getPDF(id: number) {
     const item = await this.findOne(id);
+    const USDollar = new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+  });
+  console.log(item);
+  
+    const saleProducts = item.saleProducts.map((saleProduct, i) => ({
+      price: USDollar.format(+saleProduct.price),
+      amount: saleProduct.amount,
+      subtotal: USDollar.format(+saleProduct.subtotal),
+      name: (saleProduct.product as any)?.name,
+      index: i + 1,
+      product: {
+        ...saleProduct.product,
+        price: USDollar.format(+saleProduct.price),
+        amount: saleProduct.amount,
+        subtotal: USDollar.format(+saleProduct.subtotal),
+        index: i + 1,
+      },
+    }));
+    item.total = USDollar.format(+item.total) as any;
+    console.log('saleProducts', saleProducts);
+
     return this.reportsService.generatePdf(
-      'MI PROFE',
+      process.env.COMPANY_NAME,
       item.customer,
       item as any,
-      [],
-      // item.studyExams,
+      saleProducts as any,
     );
   }
 }

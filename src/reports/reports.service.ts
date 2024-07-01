@@ -1,4 +1,5 @@
 import * as fs from 'fs';
+import * as moment from 'moment';
 import * as path from 'path';
 import * as pdf from 'pdf-creator-node';
 
@@ -101,21 +102,38 @@ export class ReportsService {
       _utcDate.getTime() - _utcDate.getTimezoneOffset() * 60000
     );
 
-    const _pdfName = `Resultados_paciente_${generateDate
+    const _pdfName = `nota_de_entrega_${generateDate
       .toISOString()
       .slice(0, -5)
       .replace('T', '_')
       .replace(/:/g, '-')}`;
 
     const options = {
-      format: 'A4',
+      format: 'letter',
       orientation: 'portrait',
       border: '10mm',
       header: {
         height: '10mm',
         contents: {
-          first: '<h1>' + companyName + '</h1>',
-          second: '<h2>Generado el ' + new Date().toISOString() + '</h2>',
+          first:
+            '<p class="center w-100 bold underline">' + companyName + '</p>',
+        },
+      },
+      footer: {
+        height: '10mm',
+        contents: {
+          default: `<table class="footer">
+                    <tbody>
+                      <tr>
+                        <td>
+                          Generado el ${moment().format('DD/MM/YYYY HH:mm')}
+                        </td>
+                        <td class="right">
+                          <span>{{page}}/{{pages}}</span>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>`,
         },
       },
       childProcessOptions: {
@@ -124,12 +142,18 @@ export class ReportsService {
         },
       },
     };
+
     const document = {
       html: templateHtml,
       data: {
         customer: customer,
-        study: sale,
-        exams: products,
+        sale: {
+          ...sale,
+          date: moment(sale.date).format('DD/MM/YYYY HH:mm'),
+        },
+        products: products,
+        date: moment().format('DD/MM/YYYY HH:mm'),
+        imgSystem: 'http://localhost:3333/public/logo.png',
       },
       path: `${CustomAssetsPathFolder}/${_pdfName}.pdf`,
       type: '',
