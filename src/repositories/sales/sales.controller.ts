@@ -65,8 +65,10 @@ export class SalesController {
   })
   async generatePdf(@Param('id') id: string) {
     return await this.studiesService.getPDF(+id);
+    // const report = await this.studiesService.getPDF(+id);
     // res.setHeader('Content-Type', 'application/pdf');
-    // res.send(pdfBuffer);
+    // res.setHeader('Content-Disposition', `attachment; filename=${report.name}`);
+    // res.send(report.buffer);
   }
 
   @Patch(':id')

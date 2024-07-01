@@ -142,7 +142,11 @@ export class ReportsService {
     try {
       const _resp = await pdf.create(document, options);
       console.log(`Reporte generado! Guardado en ${_resp.filename}`);
-      return { reportUrl: `http://localhost:3333/api/public/${_pdfName}.pdf` };
+      return {
+        reportUrl: `http://localhost:3333/public/${_pdfName}.pdf`,
+        name: _pdfName,
+        // buffer: pdfBuffer,
+      };
     } catch (error) {
       console.log(error);
       throw new InternalServerErrorException();

@@ -245,7 +245,7 @@ export class SalesService implements CrudRepository<Sale> {
   async getPDF(id: number) {
     const item = await this.findOne(id);
     return this.reportsService.generatePdf(
-      'Laboratorio BRIMON',
+      'MI PROFE',
       item.customer,
       item as any,
       [],
