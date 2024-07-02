@@ -10,7 +10,7 @@ import {
 import { IdEntity } from '../../base';
 import { Customer } from '../../customers';
 import { User } from '../../users/entities';
-import { StageStudy } from '../enums';
+import { StageSale } from '../enums';
 import { SaleProduct } from './saleProduct.entity';
 
 @Entity()
@@ -21,7 +21,7 @@ export class Sale extends IdEntity {
   @Column({ nullable: true })
   note?: string;
 
-  @Column({ nullable: false, default: StageStudy.Pending })
+  @Column({ nullable: false, default: StageSale.Pending })
   stage: string;
 
   @Column({ nullable: false, default: 0 })

@@ -28,6 +28,11 @@ export class GetSalesDto {
 
   @ApiPropertyOptional()
   @IsOptional()
+  @IsString()
+  stage?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
   @IsDateString()
   date?: Date;
 

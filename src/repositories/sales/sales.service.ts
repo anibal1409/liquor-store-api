@@ -7,6 +7,7 @@ import {
 
 // eslint-disable-next-line prettier/prettier
 import {
+  BadRequestException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -26,6 +27,7 @@ import {
   Sale,
   SaleProduct,
 } from './entities';
+import { STAGE_STUDY_VALUE } from './enums';
 
 @Injectable()
 export class SalesService implements CrudRepository<Sale> {
@@ -35,9 +37,12 @@ export class SalesService implements CrudRepository<Sale> {
     @InjectRepository(SaleProduct)
     private readonly repositoryStudyExams: Repository<SaleProduct>,
     private readonly reportsService: ReportsService,
-  ) { }
+  ) {}
 
   async findValid(id: number): Promise<Sale> {
+    if (!id) {
+      throw new BadRequestException('ID null');
+    }
     const entity = await this.repository.findOne({
       where: {
         id,
@@ -73,12 +78,15 @@ export class SalesService implements CrudRepository<Sale> {
   }
 
   findAll(data?: GetSalesDto) {
+    console.log(data);
     const start = moment(data?.start)
       .startOf('day')
       .toDate();
     const end = moment(data?.end)
       .startOf('day')
       .toDate();
+
+    console.log(start, end);
 
     return this.repository.find({
       where: {
@@ -87,6 +95,7 @@ export class SalesService implements CrudRepository<Sale> {
           id: data?.customerId,
         },
         date: !!data?.start ? Between(start, end) : null,
+        stage: data?.stage,
       },
       order: {
         date: 'DESC',
@@ -120,7 +129,7 @@ export class SalesService implements CrudRepository<Sale> {
     const studyExams = updateDto.saleProducts.map((saleProduct) => {
       return {
         id: saleProduct.id,
-        exam: {
+        product: {
           id: saleProduct.product.id,
         },
         sale: {
@@ -246,9 +255,7 @@ export class SalesService implements CrudRepository<Sale> {
     const USDollar = new Intl.NumberFormat('en-US', {
       style: 'currency',
       currency: 'USD',
-  });
-  console.log(item);
-  
+    });
     const saleProducts = item.saleProducts.map((saleProduct, i) => ({
       price: USDollar.format(+saleProduct.price),
       amount: saleProduct.amount,
@@ -264,13 +271,48 @@ export class SalesService implements CrudRepository<Sale> {
       },
     }));
     item.total = USDollar.format(+item.total) as any;
-    console.log('saleProducts', saleProducts);
 
     return this.reportsService.generatePdf(
-      process.env.COMPANY_NAME,
       item.customer,
       item as any,
       saleProducts as any,
     );
+  }
+
+  async getReportSales(data: GetSalesDto) {
+    let sales = await this.findAll(data);
+    const USDollar = new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+    });
+
+    sales = sales?.map((sale, index) => ({
+      index: index + 1,
+      totalF: USDollar.format(+sale.total),
+      date: moment().format('DD/MM/YYYY HH:mm'),
+      stage: STAGE_STUDY_VALUE[sale.stage].name,
+      total: sale.total,
+      code: this.formatNumberToDigits(sale.id),
+      products: sale.saleProducts?.reduce(
+        (accumulator: number, currentValue: SaleProduct) =>
+          accumulator + +currentValue.amount,
+        0,
+      ),
+    })) as any;
+    const total = sales?.reduce(
+      (accumulator: number, currentValue: Sale) =>
+        accumulator + +currentValue.total,
+      0,
+    );
+    return this.reportsService.generateReport(
+      sales,
+      total,
+      data.start,
+      data.end,
+    );
+  }
+
+  formatNumberToDigits(number: number) {
+    return number.toString().padStart(4, '0');
   }
 }

@@ -86,7 +86,6 @@ export class ReportsService {
   // }
 
   async generatePdf(
-    companyName: string,
     customer: Customer,
     sale: Sale,
     products: SaleProduct[],
@@ -112,13 +111,6 @@ export class ReportsService {
       format: 'letter',
       orientation: 'portrait',
       border: '10mm',
-      header: {
-        height: '10mm',
-        contents: {
-          first:
-            '<p class="center w-100 bold underline">' + companyName + '</p>',
-        },
-      },
       footer: {
         height: '10mm',
         contents: {
@@ -154,15 +146,14 @@ export class ReportsService {
         products: products,
         date: moment().format('DD/MM/YYYY HH:mm'),
         imgSystem: 'http://localhost:3333/public/logo.png',
+        companyName: process.env.COMPANY_NAME,
+        companyDocument: process.env.COMPANY_DOCUMENT,
+        companyAddress: process.env.COMPANY_ADDRESS,
       },
       path: `${CustomAssetsPathFolder}/${_pdfName}.pdf`,
       type: '',
     };
 
-    // const pdfBuffer = await pdf.create(document, options);
-    // return pdfBuffer;
-
-    // return { reportUrl: `http://localhost:3333/api/public/${_pdfName}.pdf` };
     try {
       const _resp = await pdf.create(document, options);
       console.log(`Reporte generado! Guardado en ${_resp.filename}`);
@@ -170,6 +161,88 @@ export class ReportsService {
         reportUrl: `http://localhost:3333/public/${_pdfName}.pdf`,
         name: _pdfName,
         // buffer: pdfBuffer,
+      };
+    } catch (error) {
+      console.log(error);
+      throw new InternalServerErrorException();
+    }
+  }
+
+
+  async generateReport(
+    sales: Sale[],
+    total: number,
+    start: string,
+    end: string,
+  ): Promise<ReportsResponseDto> {
+    const templateHtml = fs.readFileSync(
+      path.resolve('./templates/report.html'),
+      'utf8',
+    );
+
+    const _utcDate = new Date();
+
+    const generateDate = new Date(
+      _utcDate.getTime() - _utcDate.getTimezoneOffset() * 60000
+    );
+
+    const _pdfName = `reporte_de_ventas_${generateDate
+      .toISOString()
+      .slice(0, -5)
+      .replace('T', '_')
+      .replace(/:/g, '-')}`;
+
+    const options = {
+      format: 'letter',
+      orientation: 'portrait',
+      border: '10mm',
+      footer: {
+        height: '10mm',
+        contents: {
+          default: `<table class="footer">
+                    <tbody>
+                      <tr>
+                        <td>
+                          Generado el ${moment().format('DD/MM/YYYY HH:mm')}
+                        </td>
+                        <td class="right">
+                          <span>{{page}}/{{pages}}</span>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>`,
+        },
+      },
+      childProcessOptions: {
+        env: {
+          OPENSSL_CONF: '/dev/null',
+        },
+      },
+    };
+
+    const document = {
+      html: templateHtml,
+      data: {
+        sales: sales,
+        date: moment().format('DD/MM/YYYY HH:mm'),
+        imgSystem: 'http://localhost:3333/public/logo.png',
+        total,
+        companyName: process.env.COMPANY_NAME,
+        companyDocument: process.env.COMPANY_DOCUMENT,
+        companyAddress: process.env.COMPANY_ADDRESS,
+        start,
+        end,
+      },
+      path: `${CustomAssetsPathFolder}/${_pdfName}.pdf`,
+      type: '',
+    };
+
+    try {
+      const _resp = await pdf.create(document, options);
+      console.log(`Reporte generado! Guardado en ${_resp.filename}`);
+      return {
+        reportUrl: `http://localhost:3333/public/${_pdfName}.pdf`,
+        name: _pdfName,
       };
     } catch (error) {
       console.log(error);

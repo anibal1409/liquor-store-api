@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>Nota de entrega</title>
+  <title>Reporte de ventas</title>
   <style>
     * {
       font-size: 0.75rem;
@@ -103,48 +103,45 @@
 
 <body>
   <p class="center w-100 bold underline">{{ companyName }}</p>
-  <p class="center w-100 bold underline">{{ companyDocument }}</p>
-  <p class="center w-100 bold underline">{{ companyAddress }}</p>
+  <p class="center w-100 bold">{{ companyDocument }}</p>
+  <p class="center w-100 bold">{{ companyAddress }}</p>
+
   
   <img class="image image-left" src="{{imgSystem}}" data-iml="5230848.099999994" />
+  <br>
 
-  <p class="center w-100 underline">NOTA DE ENTREGA</p>
+  <p class="center w-100 underline">REPORTE DE VENTAS</p>
+
+  <p class="right w-100 "><span class="bold">Consulta:</span> {{ start }} - {{ end }}</p>
   
   <br>
 
-  <p class="right w-100 "><span class="bold">Fecha:</span> {{ sale.date }}</p>
-
-
-
-  <p><span class="bold">Cliente:</span> {{ customer.idDocument }} - {{ customer.firstName }}, {{ customer.lastName }}.
-  </p>
-
-  <p class="center w-100 underline">Detalles de los productos</p>
   <table class="products">
     <thead>
       <tr>
         <th>N</th>
-        <th>Descripción</th>
-        <th>Precio</th>
-        <th>Cantidad</th>
-        <th>Subtotal</th>
+        <th>Código</th>
+        <th>Fecha</th>
+        <th>N de Productos</th>
+        <th>Estado</th>
+        <th>Total</th>
       </tr>
     </thead>
     <tbody>
-      {{#each products}}
+      {{#each sales as |sale| }}
       <tr>
-        <td>{{ product.index }}</td>
-        <td>{{ product.name }}</td>
-        <td>{{ product.price }}</td>
-        <td>{{ product.amount }}</td>
-        <td>{{ product.subtotal }}</td>
+        <td>{{ sale.index }}</td>
+        <td>{{ sale.code }}</td>
+        <td>{{ sale.date }}</td>
+        <td>{{ sale.products }}</td>
+        <td>{{ sale.stage }}</td>
+        <td>{{ sale.totalF }}</td>
       </tr>
       {{/each}}
     </tbody>
   </table>
 
-
-  <p class="right w-100 "><span class="bold">Total:</span> {{ sale.total }}</p>
+  <p class="right w-100 "><span class="bold">Total General:</span> {{ total }}</p>
 
 </body>
 

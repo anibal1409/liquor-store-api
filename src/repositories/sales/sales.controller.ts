@@ -46,6 +46,15 @@ export class SalesController {
     return this.studiesService.findAll(data);
   }
 
+  @Get('resports')
+  @ApiResponse({
+    type: ReportsResponseDto,
+  })
+  async generateReport(@Query() data: GetSalesDto) {
+    console.log('resports');
+    return await this.studiesService.getReportSales(data);
+  }
+
   @Get(':id')
   @ApiResponse({
     type: SaleRespondeDto,
@@ -54,21 +63,13 @@ export class SalesController {
     return this.studiesService.findOne(+id);
   }
 
-  // @Get(':id/pdf')
-  // async generateStudyPDF(@Param('id') id: string, @Res() res: Response) {
-  //   return this.studiesService.generatePDF(+id, res);
-  // }
-
   @Get('resport/:id')
   @ApiResponse({
     type: ReportsResponseDto,
   })
   async generatePdf(@Param('id') id: string) {
+    console.log('resport/:id');
     return await this.studiesService.getPDF(+id);
-    // const report = await this.studiesService.getPDF(+id);
-    // res.setHeader('Content-Type', 'application/pdf');
-    // res.setHeader('Content-Disposition', `attachment; filename=${report.name}`);
-    // res.send(report.buffer);
   }
 
   @Patch(':id')

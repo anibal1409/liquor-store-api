@@ -828,6 +828,14 @@
             }
           },
           {
+            "name": "stage",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "name": "date",
             "required": false,
             "in": "query",
@@ -993,6 +1001,101 @@
             "name": "id",
             "required": true,
             "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReportsResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "sale"
+        ]
+      }
+    },
+    "/sales/resports": {
+      "get": {
+        "operationId": "SalesController_generateReport",
+        "parameters": [
+          {
+            "name": "id",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "status",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "customerName",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "stage",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "date",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "format": "date-time",
+              "type": "string"
+            }
+          },
+          {
+            "name": "categoryId",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "customerId",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "start",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "end",
+            "required": false,
+            "in": "query",
             "schema": {
               "type": "string"
             }
@@ -1830,6 +1933,9 @@
           "note": {
             "type": "string"
           },
+          "stage": {
+            "type": "string"
+          },
           "total": {
             "type": "number"
           },
@@ -1846,6 +1952,7 @@
         "required": [
           "id",
           "date",
+          "stage",
           "total",
           "customer",
           "saleProducts"
@@ -1856,10 +1963,14 @@
         "properties": {
           "reportUrl": {
             "type": "string"
+          },
+          "name": {
+            "type": "string"
           }
         },
         "required": [
-          "reportUrl"
+          "reportUrl",
+          "name"
         ]
       },
       "UpdateSaleDto": {
