@@ -27,7 +27,10 @@ import {
   Sale,
   SaleProduct,
 } from './entities';
-import { STAGE_STUDY_VALUE } from './enums';
+import {
+  STAGE_STUDY_VALUE,
+  StageSale,
+} from './enums';
 
 @Injectable()
 export class SalesService implements CrudRepository<Sale> {
@@ -78,15 +81,12 @@ export class SalesService implements CrudRepository<Sale> {
   }
 
   findAll(data?: GetSalesDto) {
-    console.log(data);
     const start = moment(data?.start)
       .startOf('day')
       .toDate();
     const end = moment(data?.end)
-      .startOf('day')
+      .endOf('day')
       .toDate();
-
-    console.log(start, end);
 
     return this.repository.find({
       where: {
@@ -98,7 +98,7 @@ export class SalesService implements CrudRepository<Sale> {
         stage: data?.stage,
       },
       order: {
-        date: 'DESC',
+        date: data?.order || 'DESC',
       },
       relations: [
         'customer',
@@ -252,6 +252,7 @@ export class SalesService implements CrudRepository<Sale> {
 
   async getPDF(id: number) {
     const item = await this.findOne(id);
+    const item2 = { ...item };
     const USDollar = new Intl.NumberFormat('en-US', {
       style: 'currency',
       currency: 'USD',
@@ -272,15 +273,16 @@ export class SalesService implements CrudRepository<Sale> {
     }));
     item.total = USDollar.format(+item.total) as any;
 
-    return this.reportsService.generatePdf(
-      item.customer,
-      item as any,
-      saleProducts as any,
-    );
+    return this.reportsService
+      .generatePdf(item.customer, item as any, saleProducts as any)
+      .finally(() => {
+        item2.stage = StageSale.Printed;
+        this.update(id, item2);
+      });
   }
 
   async getReportSales(data: GetSalesDto) {
-    let sales = await this.findAll(data);
+    let sales = await this.findAll({ ...data, order: 'ASC' });
     const USDollar = new Intl.NumberFormat('en-US', {
       style: 'currency',
       currency: 'USD',
@@ -289,7 +291,7 @@ export class SalesService implements CrudRepository<Sale> {
     sales = sales?.map((sale, index) => ({
       index: index + 1,
       totalF: USDollar.format(+sale.total),
-      date: moment().format('DD/MM/YYYY HH:mm'),
+      date: moment(sale.date).format('DD/MM/YYYY HH:mm'),
       stage: STAGE_STUDY_VALUE[sale.stage].name,
       total: sale.total,
       code: this.formatNumberToDigits(sale.id),
@@ -306,7 +308,7 @@ export class SalesService implements CrudRepository<Sale> {
     );
     return this.reportsService.generateReport(
       sales,
-      total,
+      USDollar.format(+total),
       data.start,
       data.end,
     );

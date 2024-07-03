@@ -55,4 +55,9 @@ export class GetSalesDto {
   @IsOptional()
   @IsDateString()
   end: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  order?: 'ASC' | 'DESC';
 }

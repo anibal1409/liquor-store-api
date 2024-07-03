@@ -171,7 +171,7 @@ export class ReportsService {
 
   async generateReport(
     sales: Sale[],
-    total: number,
+    total: string,
     start: string,
     end: string,
   ): Promise<ReportsResponseDto> {
