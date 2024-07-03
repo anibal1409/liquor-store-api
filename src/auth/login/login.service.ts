@@ -46,6 +46,7 @@ export class LoginService {
     const secretData = {
       token: _token,
       id,
+      email,
     };
 
     const _expiredTime = parseInt(
