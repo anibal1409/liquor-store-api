@@ -15,6 +15,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 
 import { CrudRepository } from '../../common';
 import { ReportsService } from '../../reports/reports.service';
+import { ProductsService } from '../products/products.service';
 // eslint-disable-next-line prettier/prettier
 import {
   GetSalesDto,
@@ -38,8 +39,9 @@ export class SalesService implements CrudRepository<Sale> {
     @InjectRepository(Sale)
     private readonly repository: Repository<Sale>,
     @InjectRepository(SaleProduct)
-    private readonly repositoryStudyExams: Repository<SaleProduct>,
+    private readonly repositorySaleProducts: Repository<SaleProduct>,
     private readonly reportsService: ReportsService,
+    private readonly productsService: ProductsService,
   ) {}
 
   async findValid(id: number): Promise<Sale> {
@@ -54,14 +56,16 @@ export class SalesService implements CrudRepository<Sale> {
       relations: ['customer', 'saleProducts', 'saleProducts.product'],
     });
     if (!entity) {
-      throw new NotFoundException('Estudio no encontrado');
+      throw new NotFoundException('Venta no encontrada');
     }
     return entity;
   }
 
   async create(createDto: CreateSaleDto): Promise<SaleRespondeDto> {
     const item = await this.repository.save(createDto);
-    const studyExams = createDto.saleProducts.map((saleProduct) => {
+    const ids: number[] = [];
+    const saleProducts = createDto.saleProducts.map((saleProduct) => {
+      ids.push(saleProduct.product.id);
       return {
         product: {
           id: saleProduct.product.id,
@@ -75,7 +79,8 @@ export class SalesService implements CrudRepository<Sale> {
       };
     });
 
-    await this.repositoryStudyExams.save(studyExams);
+    await this.repositorySaleProducts.save(saleProducts);
+    await this.updateProductsCreate(ids, saleProducts);
 
     return await this.findOne(item.id);
   }
@@ -115,7 +120,8 @@ export class SalesService implements CrudRepository<Sale> {
   }
 
   async update(id: number, updateDto: UpdateSaleDto): Promise<SaleRespondeDto> {
-    const item = await this.repository.save({
+    const item = await this.findValid(id);
+    const save = await this.repository.save({
       id,
       note: updateDto.note,
       customer: {
@@ -126,7 +132,13 @@ export class SalesService implements CrudRepository<Sale> {
       stage: updateDto.stage,
     });
 
-    const studyExams = updateDto.saleProducts.map((saleProduct) => {
+    const ids: number[] = [];
+    item.saleProducts.forEach((saleProduct) => {
+      ids.push(saleProduct.product.id);
+    });
+
+    const salesProducts = updateDto.saleProducts.map((saleProduct) => {
+      ids.push(saleProduct.product.id);
       return {
         id: saleProduct.id,
         product: {
@@ -141,9 +153,16 @@ export class SalesService implements CrudRepository<Sale> {
       };
     });
 
-    this.repositoryStudyExams.save(studyExams);
+    await this.repositorySaleProducts.delete({
+      sale: {
+        id,
+      },
+    });
 
-    return this.findOne(item.id);
+    this.repositorySaleProducts.save(salesProducts);
+    await this.updateProductsUpdate(ids, item.saleProducts, salesProducts);
+
+    return this.findOne(save.id);
   }
 
   async remove(id: number): Promise<SaleRespondeDto> {
@@ -316,5 +335,52 @@ export class SalesService implements CrudRepository<Sale> {
 
   formatNumberToDigits(number: number) {
     return number.toString().padStart(4, '0');
+  }
+
+  async updateProductsCreate(ids: number[], saleProducts: any[]) {
+    let products = await this.productsService.findByIds(ids);
+    products = products.map((product) => {
+      const saleProduct: any = saleProducts.find(
+        (saleProduct) => saleProduct.product.id === product.id,
+      );
+      return {
+        ...product,
+        stock: product.stock - (saleProduct?.amount || 0),
+      };
+    });
+    await this.productsService.saveMany(products);
+  }
+
+  async updateProductsUpdate(
+    ids: number[],
+    oldSaleProducts: any[],
+    newSaleProducts: any[],
+  ) {
+    let products = await this.productsService.findByIds(ids);
+    console.log(111, products);
+
+    products = products.map((product) => {
+      const saleProduct: any = oldSaleProducts.find(
+        (saleProduct) => saleProduct.product.id === product.id,
+      );
+      return {
+        ...product,
+        stock: product.stock + (+saleProduct?.amount || 0),
+      };
+    });
+    console.log(222, products);
+
+    products = products.map((product) => {
+      const saleProduct: any = newSaleProducts.find(
+        (saleProduct) => saleProduct.product.id === product.id,
+      );
+      return {
+        ...product,
+        stock: product.stock - (+saleProduct?.amount || 0),
+      };
+    });
+    console.log(222, products);
+
+    await this.productsService.saveMany(products);
   }
 }
