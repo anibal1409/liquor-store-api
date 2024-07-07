@@ -2,6 +2,7 @@ import * as moment from 'moment';
 // eslint-disable-next-line prettier/prettier
 import {
   Between,
+  In,
   Repository,
 } from 'typeorm';
 
@@ -32,6 +33,7 @@ import {
   SaleProduct,
 } from './entities';
 import {
+  STAGE_STATISTICS,
   STAGE_STUDY_VALUE,
   StageSale,
 } from './enums';
@@ -181,90 +183,99 @@ export class SalesService implements CrudRepository<Sale> {
       where: {
         deleted: false,
         date: Between(startMonth, endMonth),
+        stage: In(STAGE_STATISTICS),
       },
     });
   }
 
-  async generateMonthlyExamStatistics(data?: GetSalesDto): Promise<
+  async generateMonthlySaleStatistics(data?: GetSalesDto): Promise<
     {
-      examName: string;
+      productName: string;
       count: number;
     }[]
   > {
     // Obtener estudios realizados en el mes y año especificados
-    const studies = await this.findAll(data);
-    console.log('generateMonthlyExamStatistics', studies);
+    const sales = await this.findAll(data);
+    console.log('generateMonthlyExamStatistics', sales);
 
     // Inicializar mapa para contar la cantidad de cada tipo de examen realizado
-    const examCounts = new Map<string, number>();
+    const productsCounts = new Map<string, number>();
 
     // Contar la cantidad de cada tipo de examen realizado
     await Promise.all(
-      studies.map(async (study) => {
-        await Promise.all(
-          study.saleProducts.map(async (studyExam) => {
-            const examName = studyExam.product.name;
-            examCounts.set(examName, (examCounts.get(examName) || 0) + 1);
-          }),
-        );
+      sales.map(async (sale) => {
+        if (STAGE_STATISTICS.includes(sale.stage as any)) {
+          await Promise.all(
+            sale.saleProducts.map(async (saleProduct) => {
+              const productName = saleProduct.product.name;
+              productsCounts.set(
+                productName,
+                (productsCounts.get(productName) || 0) + +saleProduct.amount,
+              );
+            }),
+          );
+        }
       }),
     );
 
     // Ordenar los tipos de examen por la cantidad de veces que se han realizado
-    const sortedExamCounts = [...examCounts.entries()].sort(
+    const sortedProductsCounts = [...productsCounts.entries()].sort(
       (a, b) => b[1] - a[1],
     );
 
-    console.log(sortedExamCounts);
+    console.log(sortedProductsCounts);
 
     // Convertir el mapa en un arreglo de objetos
-    const examStatisticsArray = sortedExamCounts.map(([examName, count]) => ({
-      examName,
-      count,
-    }));
+    const productStatisticsArray = sortedProductsCounts.map(
+      ([productName, count]) => ({
+        productName,
+        count,
+      }),
+    );
 
     // Retorna los tipos de examen más realizados en el mes como un arreglo de objetos
-    return examStatisticsArray;
+    return productStatisticsArray;
   }
 
-  async generateMonthlyExamTypeStatistics(
+  async generateMonthlyCategoriesStatistics(
     data?: GetSalesDto,
-  ): Promise<{ examType: string; count: number }[]> {
+  ): Promise<{ category: string; count: number }[]> {
     try {
       // Obtener estudios realizados en el mes y año especificados
-      const studies = await this.findAll(data);
+      const sales = await this.findAll(data);
 
       // Inicializar un mapa para almacenar la cantidad de exámenes por tipo
-      const examTypeCounts = new Map<string, number>();
+      const categoryCounts = new Map<string, number>();
 
       // Contar la cantidad de exámenes realizados por tipo
       await Promise.all(
-        studies.map(async (study) => {
-          await Promise.all(
-            study.saleProducts.map(async (studyExam) => {
-              console.log(studyExam.product);
-              const examType = studyExam.product?.category?.name;
-              if (examType) {
-                examTypeCounts.set(
-                  examType,
-                  (examTypeCounts.get(examType) || 0) + 1,
-                );
-              }
-            }),
-          );
+        sales.map(async (sale) => {
+          if (STAGE_STATISTICS.includes(sale.stage as any)) {
+            await Promise.all(
+              sale.saleProducts.map(async (saleProduct) => {
+                const category = saleProduct.product?.category?.name;
+                if (category) {
+                  categoryCounts.set(
+                    category,
+                    (categoryCounts.get(category) || 0) + +saleProduct.amount,
+                  );
+                }
+              }),
+            );
+          }
         }),
       );
 
       // Convertir el mapa en un arreglo de objetos
-      const examTypeStatisticsArray = Array.from(examTypeCounts.entries()).map(
-        ([examType, count]) => ({
-          examType,
+      const categoryStatisticsArray = Array.from(categoryCounts.entries()).map(
+        ([category, count]) => ({
+          category,
           count,
         }),
       );
 
       // Retorna el arreglo con la cantidad de exámenes realizados por tipo
-      return examTypeStatisticsArray;
+      return categoryStatisticsArray;
     } catch (error) {
       // Manejar errores
       console.error('Error en generateMonthlyExamTypeStatistics:', error);

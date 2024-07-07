@@ -1997,13 +1997,13 @@
             "type": "number"
           },
           "amount": {
-            "type": "string"
+            "type": "number"
           },
           "price": {
-            "type": "string"
+            "type": "number"
           },
           "subtotal": {
-            "type": "string"
+            "type": "number"
           },
           "product": {
             "$ref": "#/components/schemas/IdCreateEntity"
@@ -2137,57 +2137,43 @@
       "CountersRespondeDto": {
         "type": "object",
         "properties": {
-          "patients": {
+          "customers": {
             "type": "number"
           },
           "users": {
             "type": "number"
           },
-          "studies": {
+          "sales": {
             "type": "number"
           },
-          "exams": {
+          "products": {
+            "type": "number"
+          },
+          "orders": {
             "type": "number"
           }
         },
         "required": [
-          "patients",
+          "customers",
           "users",
-          "studies",
-          "exams"
-        ]
-      },
-      "SaleDto": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string"
-          },
-          "count": {
-            "type": "number"
-          }
-        },
-        "required": [
-          "name",
-          "count"
+          "sales",
+          "products",
+          "orders"
         ]
       },
       "MonthRespondeDto": {
         "type": "object",
         "properties": {
-          "category": {
+          "categories": {
             "type": "object"
           },
-          "sales": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/SaleDto"
-            }
+          "products": {
+            "type": "object"
           }
         },
         "required": [
-          "category",
-          "sales"
+          "categories",
+          "products"
         ]
       },
       "CreateOrderProductDto": {
@@ -2197,13 +2183,13 @@
             "type": "number"
           },
           "amount": {
-            "type": "string"
+            "type": "number"
           },
           "price": {
-            "type": "string"
+            "type": "number"
           },
           "subtotal": {
-            "type": "string"
+            "type": "number"
           },
           "product": {
             "$ref": "#/components/schemas/IdCreateEntity"

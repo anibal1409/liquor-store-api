@@ -118,6 +118,7 @@ export class ProductsService implements CrudRepository<Product> {
     return await this.repository.count({
       where: {
         deleted: false,
+        status: true,
       },
     });
   }

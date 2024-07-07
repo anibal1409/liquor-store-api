@@ -33,3 +33,5 @@ export const STAGE_STUDY_VALUE: {
   [StageSale.Paid]: STAGE_SALE[2],
   [StageSale.Printed]: STAGE_SALE[3],
 };
+
+export const STAGE_STATISTICS = [StageSale.Paid, StageSale.Printed];
