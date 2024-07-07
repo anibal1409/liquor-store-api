@@ -10,6 +10,10 @@ import {
 
 import { Customer } from '../repositories/customers/entities';
 import {
+  Order,
+  OrderProduct,
+} from '../repositories/orders';
+import {
   Sale,
   SaleProduct,
 } from '../repositories/sales/entities';
@@ -18,80 +22,14 @@ import { CustomAssetsPathFolder } from './types/config';
 
 @Injectable()
 export class ReportsService {
-  // constructor(
-  //   private publicationsService: PublicationsService,
-  //   private configurationService: ConfigurationService
-  // ) {}
-  // async generateReport(reportsDto: ReportsDto): Promise<ReportsResponseDto> {
-  //   const dataPublications = await this._getPublicationsData(reportsDto);
 
-  //   const _config = await this.configurationService.getAllConfig();
-  //   const _imgPath = _config.imagePath;
-
-  //   let currentImg = '';
-
-  //   if (!_imgPath.includes(DefaultImgOrgName)) {
-  //     currentImg = (await this.configurationService.getConfigResponse())
-  //       .imageUrl;
-  //   }
-
-  //   const _dateRange = reportsDto.dateRange || 'Todas';
-
-  //   const _utcDate = new Date();
-
-  //   const generateDate = new Date(
-  //     _utcDate.getTime() - _utcDate.getTimezoneOffset() * 60000
-  //   );
-
-  //   const _pdfName = `Reporte_publicaciones_${generateDate
-  //     .toISOString()
-  //     .slice(0, -5)
-  //     .replace('T', '_')
-  //     .replace(/:/g, '-')}`;
-
-  //   const document: DocumentOptions = {
-  //     html: htmlTemplate,
-  //     data: {
-  //       publications: dataPublications,
-  //       date: generateDate.toLocaleDateString('es'),
-  //       dateRange: _dateRange,
-  //       imgSystem: 'http://localhost:3333/api/public/midbrand.png',
-  //       imgOrg: currentImg,
-  //     },
-  //     path: `${CustomAssetsPathFolder}/${_pdfName}.pdf`,
-  //     type: '',
-  //   };
-
-  //   const pageOptions = {
-  //     format: 'letter',
-  //     orientation: 'portrait',
-  //     border: '10mm',
-  //     footer: {
-  //       height: '10mm',
-  //       contents: {
-  //         default:
-  //           '<span style="color: #444; font-size: 0.5rem">{{page}}/{{pages}}</span>',
-  //       },
-  //     },
-  //   };
-
-  //   try {
-  //     const _resp = await pdf.create(document, pageOptions);
-  //     console.log(`Reporte generado! Guardado en ${_resp.filename}`);
-  //     return { reportUrl: `http://localhost:3333/api/public/${_pdfName}.pdf` };
-  //   } catch (error) {
-  //     console.log(error);
-  //     throw new InternalServerErrorException();
-  //   }
-  // }
-
-  async generatePdf(
+  async generatePdfSale(
     customer: Customer,
     sale: Sale,
     products: SaleProduct[],
   ): Promise<ReportsResponseDto> {
     const templateHtml = fs.readFileSync(
-      path.resolve('./templates/template.html'),
+      path.resolve('./templates/sale.html'),
       'utf8',
     );
 
@@ -168,6 +106,91 @@ export class ReportsService {
     }
   }
 
+  async generatePdfOrder(
+    provider: string,
+    order: Order,
+    products: OrderProduct[],
+  ): Promise<ReportsResponseDto> {
+    const templateHtml = fs.readFileSync(
+      path.resolve('./templates/order.html'),
+      'utf8',
+    );
+
+    const _utcDate = new Date();
+
+    const generateDate = new Date(
+      _utcDate.getTime() - _utcDate.getTimezoneOffset() * 60000
+    );
+
+    const _pdfName = `pedido_${generateDate
+      .toISOString()
+      .slice(0, -5)
+      .replace('T', '_')
+      .replace(/:/g, '-')}`;
+
+    const options = {
+      format: 'letter',
+      orientation: 'portrait',
+      border: '10mm',
+      footer: {
+        height: '10mm',
+        contents: {
+          default: `<table class="footer">
+                    <tbody>
+                      <tr>
+                        <td>
+                          Generado el ${moment().format('DD/MM/YYYY HH:mm')}
+                        </td>
+                        <td class="right">
+                          <span>{{page}}/{{pages}}</span>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>`,
+        },
+      },
+      childProcessOptions: {
+        env: {
+          OPENSSL_CONF: '/dev/null',
+        },
+      },
+    };
+
+    const document = {
+      html: templateHtml,
+      data: {
+        provider: provider,
+        order: {
+          ...order,
+          date: moment(order.date).format('DD/MM/YYYY HH:mm'),
+          deadline: order?.deadline
+            ? moment(order.deadline).format('DD/MM/YYYY HH:mm')
+            : 'N/A',
+        },
+        products: products,
+        date: moment().format('DD/MM/YYYY HH:mm'),
+        imgSystem: 'http://localhost:3333/public/logo.png',
+        companyName: process.env.COMPANY_NAME,
+        companyDocument: process.env.COMPANY_DOCUMENT,
+        companyAddress: process.env.COMPANY_ADDRESS,
+      },
+      path: `${CustomAssetsPathFolder}/${_pdfName}.pdf`,
+      type: '',
+    };
+
+    try {
+      const _resp = await pdf.create(document, options);
+      console.log(`Reporte generado! Guardado en ${_resp.filename}`);
+      return {
+        reportUrl: `http://localhost:3333/public/${_pdfName}.pdf`,
+        name: _pdfName,
+        // buffer: pdfBuffer,
+      };
+    } catch (error) {
+      console.log(error);
+      throw new InternalServerErrorException();
+    }
+  }
 
   async generateReport(
     sales: Sale[],
@@ -176,7 +199,7 @@ export class ReportsService {
     end: string,
   ): Promise<ReportsResponseDto> {
     const templateHtml = fs.readFileSync(
-      path.resolve('./templates/report.html'),
+      path.resolve('./templates/report_sales.html'),
       'utf8',
     );
 

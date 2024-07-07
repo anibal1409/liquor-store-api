@@ -1,4 +1,5 @@
 import { Type } from 'class-transformer';
+// eslint-disable-next-line prettier/prettier
 import {
   ArrayNotEmpty,
   IsDateString,
@@ -8,34 +9,30 @@ import {
   IsString,
 } from 'class-validator';
 
+// eslint-disable-next-line prettier/prettier
 import {
   ApiProperty,
   ApiPropertyOptional,
-  OmitType,
-  PartialType,
 } from '@nestjs/swagger';
 
 import { Order } from '../entities';
 import { CreateOrderProductDto } from './create-order-product.dto';
 
-export class CreateOrderDto extends PartialType(
-  OmitType(Order, [
-    'updatedAt',
-    'createdAt',
-    'deleted',
-    'status',
-    'orderProducts',
-  ]),
-) {
+export class OrderRespondeDto {
+  @ApiProperty()
+  @IsNotEmpty()
+  @Type(() => Number)
+  id: number;
+
   @ApiProperty()
   @IsNotEmpty()
   @IsDateString()
   date!: Date;
 
-  @ApiPropertyOptional()
-  @IsOptional()
+  @ApiProperty()
+  @IsNotEmpty()
   @IsDateString()
-  deadline?: Date;
+  deadline!: Date;
 
   @ApiPropertyOptional()
   @IsOptional()
@@ -49,16 +46,27 @@ export class CreateOrderDto extends PartialType(
 
   @ApiProperty()
   @IsNotEmpty()
-  @IsString()
-  provider: string;
+  @IsNumber()
+  total!: number;
 
   @ApiProperty()
   @IsNotEmpty()
-  @IsNumber()
-  total!: number;
+  @IsString()
+  provider: string;
 
   @ApiProperty({ type: [CreateOrderProductDto] })
   @ArrayNotEmpty()
   @Type(() => CreateOrderProductDto)
   orderProducts: CreateOrderProductDto[];
+
+  constructor(data: Order) {
+    this.id = data.id;
+    this.date = data.date;
+    this.note = data.note;
+    this.provider = data.provider;
+    this.total = data.total;
+    this.stage = data.stage;
+    this.deadline = data.deadline;
+    this.orderProducts = data.orderProducts as any;
+  }
 }

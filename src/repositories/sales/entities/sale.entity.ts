@@ -24,7 +24,7 @@ export class Sale extends IdEntity {
   @Column({ nullable: false, default: StageSale.Pending })
   stage: string;
 
-  @Column({ nullable: false, default: 0 })
+  @Column('decimal', { nullable: false, default: 0 })
   total: number;
 
   @ManyToOne(() => Customer, (customer) => customer.id)

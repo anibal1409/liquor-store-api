@@ -1239,8 +1239,15 @@
           }
         },
         "responses": {
-          "201": {
-            "description": ""
+          "default": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrderRespondeDto"
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -1251,8 +1258,18 @@
         "operationId": "OrdersController_findAll",
         "parameters": [],
         "responses": {
-          "200": {
-            "description": ""
+          "default": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/OrderRespondeDto"
+                  }
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -1274,8 +1291,15 @@
           }
         ],
         "responses": {
-          "200": {
-            "description": ""
+          "default": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrderRespondeDto"
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -1305,8 +1329,15 @@
           }
         },
         "responses": {
-          "200": {
-            "description": ""
+          "default": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrderRespondeDto"
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -1326,8 +1357,45 @@
           }
         ],
         "responses": {
-          "200": {
-            "description": ""
+          "default": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrderRespondeDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "orders"
+        ]
+      }
+    },
+    "/orders/resport/{id}": {
+      "get": {
+        "operationId": "OrdersController_generatePdf",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReportsResponseDto"
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -2122,13 +2190,143 @@
           "sales"
         ]
       },
+      "CreateOrderProductDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "amount": {
+            "type": "string"
+          },
+          "price": {
+            "type": "string"
+          },
+          "subtotal": {
+            "type": "string"
+          },
+          "product": {
+            "$ref": "#/components/schemas/IdCreateEntity"
+          }
+        },
+        "required": [
+          "amount",
+          "price",
+          "subtotal",
+          "product"
+        ]
+      },
       "CreateOrderDto": {
         "type": "object",
-        "properties": {}
+        "properties": {
+          "date": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "deadline": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "note": {
+            "type": "string"
+          },
+          "stage": {
+            "type": "string"
+          },
+          "provider": {
+            "type": "string"
+          },
+          "total": {
+            "type": "number"
+          },
+          "orderProducts": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CreateOrderProductDto"
+            }
+          }
+        },
+        "required": [
+          "date",
+          "stage",
+          "provider",
+          "total",
+          "orderProducts"
+        ]
+      },
+      "OrderRespondeDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "date": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "deadline": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "note": {
+            "type": "string"
+          },
+          "stage": {
+            "type": "string"
+          },
+          "total": {
+            "type": "number"
+          },
+          "provider": {
+            "type": "string"
+          },
+          "orderProducts": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CreateOrderProductDto"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "date",
+          "deadline",
+          "stage",
+          "total",
+          "provider",
+          "orderProducts"
+        ]
       },
       "UpdateOrderDto": {
         "type": "object",
-        "properties": {}
+        "properties": {
+          "date": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "deadline": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "note": {
+            "type": "string"
+          },
+          "stage": {
+            "type": "string"
+          },
+          "provider": {
+            "type": "string"
+          },
+          "total": {
+            "type": "number"
+          },
+          "orderProducts": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CreateOrderProductDto"
+            }
+          }
+        }
       },
       "LoginDto": {
         "type": "object",

@@ -13,7 +13,10 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 
-import { CrudRepository } from '../../common';
+import {
+  CrudRepository,
+  formatNumberToDigits,
+} from '../../common';
 import { ReportsService } from '../../reports/reports.service';
 import { ProductsService } from '../products/products.service';
 // eslint-disable-next-line prettier/prettier
@@ -293,7 +296,7 @@ export class SalesService implements CrudRepository<Sale> {
     item.total = USDollar.format(+item.total) as any;
 
     return this.reportsService
-      .generatePdf(item.customer, item as any, saleProducts as any)
+      .generatePdfSale(item.customer, item as any, saleProducts as any)
       .finally(() => {
         item2.stage = StageSale.Printed;
         this.update(id, item2);
@@ -313,7 +316,7 @@ export class SalesService implements CrudRepository<Sale> {
       date: moment(sale.date).format('DD/MM/YYYY HH:mm'),
       stage: STAGE_STUDY_VALUE[sale.stage].name,
       total: sale.total,
-      code: this.formatNumberToDigits(sale.id),
+      code: formatNumberToDigits(sale.id),
       products: sale.saleProducts?.reduce(
         (accumulator: number, currentValue: SaleProduct) =>
           accumulator + +currentValue.amount,
@@ -331,10 +334,6 @@ export class SalesService implements CrudRepository<Sale> {
       data.start,
       data.end,
     );
-  }
-
-  formatNumberToDigits(number: number) {
-    return number.toString().padStart(4, '0');
   }
 
   async updateProductsCreate(ids: number[], saleProducts: any[]) {
@@ -357,7 +356,6 @@ export class SalesService implements CrudRepository<Sale> {
     newSaleProducts: any[],
   ) {
     let products = await this.productsService.findByIds(ids);
-    console.log(111, products);
 
     products = products.map((product) => {
       const saleProduct: any = oldSaleProducts.find(
@@ -368,7 +366,6 @@ export class SalesService implements CrudRepository<Sale> {
         stock: product.stock + (+saleProduct?.amount || 0),
       };
     });
-    console.log(222, products);
 
     products = products.map((product) => {
       const saleProduct: any = newSaleProducts.find(
@@ -379,7 +376,6 @@ export class SalesService implements CrudRepository<Sale> {
         stock: product.stock - (+saleProduct?.amount || 0),
       };
     });
-    console.log(222, products);
 
     await this.productsService.saveMany(products);
   }

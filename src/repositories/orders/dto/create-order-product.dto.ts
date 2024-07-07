@@ -10,7 +10,7 @@ import { ApiProperty } from '@nestjs/swagger';
 
 import { IdCreateEntity } from '../../base/id.create';
 
-export class CreateSaleProductDto extends IdCreateEntity {
+export class CreateOrderProductDto extends IdCreateEntity {
   @ApiProperty()
   @IsNotEmpty()
   @IsNumber()

@@ -27,14 +27,14 @@ import { SalesService } from './sales.service';
 @ApiTags('sale')
 @Controller('sales')
 export class SalesController {
-  constructor(private readonly studiesService: SalesService) {}
+  constructor(private readonly salesService: SalesService) {}
 
   @Post()
   @ApiResponse({
     type: SaleRespondeDto,
   })
   create(@Body() createDto: CreateSaleDto) {
-    return this.studiesService.create(createDto);
+    return this.salesService.create(createDto);
   }
 
   @Get()
@@ -43,7 +43,7 @@ export class SalesController {
     isArray: true,
   })
   findAll(@Query() data: GetSalesDto) {
-    return this.studiesService.findAll(data);
+    return this.salesService.findAll(data);
   }
 
   @Get('resports')
@@ -52,7 +52,7 @@ export class SalesController {
   })
   async generateReport(@Query() data: GetSalesDto) {
     console.log('resports');
-    return await this.studiesService.getReportSales(data);
+    return await this.salesService.getReportSales(data);
   }
 
   @Get(':id')
@@ -60,7 +60,7 @@ export class SalesController {
     type: SaleRespondeDto,
   })
   findOne(@Param('id') id: string) {
-    return this.studiesService.findOne(+id);
+    return this.salesService.findOne(+id);
   }
 
   @Get('resport/:id')
@@ -69,7 +69,7 @@ export class SalesController {
   })
   async generatePdf(@Param('id') id: string) {
     console.log('resport/:id');
-    return await this.studiesService.getPDF(+id);
+    return await this.salesService.getPDF(+id);
   }
 
   @Patch(':id')
@@ -77,7 +77,7 @@ export class SalesController {
     type: SaleRespondeDto,
   })
   update(@Param('id') id: string, @Body() updateDto: UpdateSaleDto) {
-    return this.studiesService.update(+id, updateDto);
+    return this.salesService.update(+id, updateDto);
   }
 
   @Delete(':id')
@@ -85,6 +85,6 @@ export class SalesController {
     type: SaleRespondeDto,
   })
   remove(@Param('id') id: string) {
-    return this.studiesService.remove(+id);
+    return this.salesService.remove(+id);
   }
 }
