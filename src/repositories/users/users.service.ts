@@ -103,7 +103,8 @@ export class UsersService implements CrudRepository<User> {
     console.log(passwordDefault);
     const user = this.repository.create({
       email: creatrDto.email,
-      password: await hashPassword(passwordDefault),
+      // password: await hashPassword(passwordDefault),
+      password: '$2b$10$9lMnPrQ24HTTjNswGp7QfOKlIfY1QUWsy6lZnA2Sr58HD6/W53LwK',
       lastName: creatrDto.lastName,
       firstName: creatrDto.firstName,
       role: creatrDto.role,

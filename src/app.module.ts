@@ -59,12 +59,6 @@ import { RepositoriesModule } from './repositories/repositories.module';
       serveRoot: '/public',
       renderPath: 'public',
     }),
-    // ServeStaticModule.forRoot({
-    //   rootPath: DefaultAssetsFolder,
-    //   renderPath: 'public',
-    //   exclude: ['/api/(.*)'],
-    //   serveRoot: '/public',
-    // }),
   ],
   controllers: [AppController],
   providers: [AppService],
