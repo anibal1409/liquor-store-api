@@ -85,7 +85,9 @@ export class SalesService implements CrudRepository<Sale> {
     });
 
     await this.repositorySaleProducts.save(saleProducts);
-    await this.updateProductsCreate(ids, saleProducts);
+    if (![StageSale.Cancelled].includes(item.stage as any)) {
+      await this.updateProductsCreate(ids, saleProducts);
+    }
 
     return await this.findOne(item.id);
   }
@@ -165,7 +167,12 @@ export class SalesService implements CrudRepository<Sale> {
     });
 
     this.repositorySaleProducts.save(salesProducts);
-    await this.updateProductsUpdate(ids, item.saleProducts, salesProducts);
+    await this.updateProductsUpdate(
+      ids,
+      item.saleProducts,
+      salesProducts,
+      item.stage as any,
+    );
 
     return this.findOne(save.id);
   }
@@ -173,6 +180,17 @@ export class SalesService implements CrudRepository<Sale> {
   async remove(id: number): Promise<SaleRespondeDto> {
     const item = await this.findValid(id);
     item.deleted = true;
+
+    const ids: number[] = [];
+    item.saleProducts.forEach((saleProduct) => {
+      ids.push(saleProduct.product.id);
+    });
+    await this.updateProductsUpdate(
+      ids,
+      item.saleProducts,
+      item.saleProducts,
+      StageSale.Cancelled,
+    );
     return new SaleRespondeDto(await this.repository.save(item));
   }
 
@@ -365,6 +383,7 @@ export class SalesService implements CrudRepository<Sale> {
     ids: number[],
     oldSaleProducts: any[],
     newSaleProducts: any[],
+    stage: StageSale,
   ) {
     let products = await this.productsService.findByIds(ids);
 
@@ -378,15 +397,17 @@ export class SalesService implements CrudRepository<Sale> {
       };
     });
 
-    products = products.map((product) => {
-      const saleProduct: any = newSaleProducts.find(
-        (saleProduct) => saleProduct.product.id === product.id,
-      );
-      return {
-        ...product,
-        stock: product.stock - (+saleProduct?.amount || 0),
-      };
-    });
+    if (![StageSale.Cancelled].includes(stage)) {
+      products = products.map((product) => {
+        const saleProduct: any = newSaleProducts.find(
+          (saleProduct) => saleProduct.product.id === product.id,
+        );
+        return {
+          ...product,
+          stock: product.stock - (+saleProduct?.amount || 0),
+        };
+      });
+    }
 
     await this.productsService.saveMany(products);
   }

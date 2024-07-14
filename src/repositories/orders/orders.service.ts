@@ -175,6 +175,11 @@ export class OrdersService implements CrudRepository<Order> {
   async remove(id: number): Promise<OrderRespondeDto> {
     const item = await this.findValid(id);
     item.deleted = true;
+    const ids: number[] = [];
+    item.orderProducts.forEach((orderProduct) => {
+      ids.push(orderProduct.product.id);
+    });
+    await this.updateProducts(ids, item.orderProducts, -1);
     return new OrderRespondeDto(await this.repository.save(item));
   }
 
@@ -309,7 +314,7 @@ export class OrdersService implements CrudRepository<Order> {
     );
   }
 
-  async updateProducts(ids: number[], orderProducts: any[]) {
+  async updateProducts(ids: number[], orderProducts: any[], type = 1) {
     let products = await this.productsService.findByIds(ids);
     products = products.map((product) => {
       const orderProduct: any = orderProducts.find(
@@ -317,7 +322,8 @@ export class OrdersService implements CrudRepository<Order> {
       );
       return {
         ...product,
-        stock: product.stock + (orderProduct?.amount || 0),
+        // eslint-disable-next-line prettier/prettier
+        stock: product.stock + ((+orderProduct?.amount || 0) * type),
       };
     });
     await this.productsService.saveMany(products);

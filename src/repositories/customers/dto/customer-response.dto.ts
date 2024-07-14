@@ -2,7 +2,6 @@ import { Type } from 'class-transformer';
 // eslint-disable-next-line prettier/prettier
 import {
   IsBoolean,
-  IsEmail,
   IsNotEmpty,
   IsOptional,
   IsString,
@@ -29,13 +28,11 @@ export class CustomerRespondeDto {
 
   @ApiProperty()
   @IsNotEmpty()
-  @IsEmail()
   @IsString()
   firstName!: string;
 
   @ApiProperty()
   @IsNotEmpty()
-  @IsEmail()
   @IsString()
   lastName!: string;
 
