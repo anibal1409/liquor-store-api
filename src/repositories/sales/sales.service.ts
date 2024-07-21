@@ -141,11 +141,15 @@ export class SalesService implements CrudRepository<Sale> {
 
     const ids: number[] = [];
     item.saleProducts.forEach((saleProduct) => {
-      ids.push(saleProduct.product.id);
+      ids.includes(saleProduct.product.id)
+        ? null
+        : ids.push(saleProduct.product.id);
     });
 
     const salesProducts = updateDto.saleProducts.map((saleProduct) => {
-      ids.push(saleProduct.product.id);
+      ids.includes(saleProduct.product.id)
+        ? null
+        : ids.push(saleProduct.product.id);
       return {
         id: saleProduct.id,
         product: {
@@ -171,7 +175,7 @@ export class SalesService implements CrudRepository<Sale> {
       ids,
       item.saleProducts,
       salesProducts,
-      item.stage as any,
+      updateDto.stage as any,
     );
 
     return this.findOne(save.id);
@@ -327,8 +331,10 @@ export class SalesService implements CrudRepository<Sale> {
     return this.reportsService
       .generatePdfSale(item.customer, item as any, saleProducts as any)
       .finally(() => {
-        item2.stage = StageSale.Printed;
-        this.update(id, item2);
+        if (item2.stage !== StageSale.Cancelled) {
+          item2.stage = StageSale.Printed;
+          this.update(id, item2);
+        }
       });
   }
 
