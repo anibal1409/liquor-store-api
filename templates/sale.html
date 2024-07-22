@@ -98,17 +98,24 @@
     .right {
       text-align: right;
     }
+    .with-background-image {
+      background-image: url('http://localhost:3333/public/logo02.png');
+      background-size: 45rem;
+      background-repeat: no-repeat;
+      background-position: center;
+      height: 55rem;
+    }
   </style>
 </head>
 
-<body>
-  <p class="center w-100 bold underline">{{ companyName }}</p>
-  <p class="center w-100 bold underline">{{ companyDocument }}</p>
-  <p class="center w-100 bold underline">{{ companyAddress }}</p>
+<body class="with-background-image">
+  <p class="center w-100 bold">{{ companyName }}</p>
+  <p class="center w-100">{{ companyDocument }}</p>
+  <p class="center w-100">{{ companyAddress }}</p>
   
   <img class="image image-left" src="{{imgSystem}}" data-iml="5230848.099999994" />
 
-  <p class="center w-100 underline">NOTA DE ENTREGA</p>
+  <p class="center w-100">NOTA DE ENTREGA Nº {{sale.id}}</p>
   
   <br>
 

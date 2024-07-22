@@ -11,7 +11,10 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 
-import { CrudRepository } from '../../common/use-case';
+import {
+  CrudRepository,
+  formatNumberToDigits,
+} from '../../common';
 import { ReportsService } from '../../reports/reports.service';
 import { ProductsService } from '../products/products.service';
 import {
@@ -304,6 +307,7 @@ export class OrdersService implements CrudRepository<Order> {
         index: i + 1,
       },
     }));
+    item.id = formatNumberToDigits(item.id) as any;
     item.total = USDollar.format(+item.total) as any;
     item.stage = STAGE_ORDER_VALUE[item.stage].name;
 

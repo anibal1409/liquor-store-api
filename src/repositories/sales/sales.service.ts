@@ -326,6 +326,7 @@ export class SalesService implements CrudRepository<Sale> {
         index: i + 1,
       },
     }));
+    item.id = formatNumberToDigits(item.id) as any;
     item.total = USDollar.format(+item.total) as any;
 
     return this.reportsService
